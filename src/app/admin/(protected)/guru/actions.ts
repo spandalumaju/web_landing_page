@@ -43,12 +43,12 @@ export async function createEducatorAction(
   }
 
   const photo = resolvePhoto(parsed.data.photo);
-  if (!photo) {
+  if (photo === null) {
     return { error: "Foto tidak valid. Unggah ulang foto." };
   }
 
   try {
-    db.insert(educators)
+    await db.insert(educators)
       .values({
         id: randomUUID(),
         name: parsed.data.name,
@@ -59,8 +59,7 @@ export async function createEducatorAction(
         level: parsed.data.level,
         sortOrder: parsed.data.sortOrder,
         published: parsed.data.published,
-      })
-      .run();
+      });
   } catch {
     return { error: "Gagal menyimpan data ke database." };
   }
@@ -77,7 +76,12 @@ export async function updateEducatorAction(
   formData: FormData,
 ): Promise<EducatorFormState> {
   await assertAdmin();
-  const existing = db.select().from(educators).where(eq(educators.id, id)).get();
+  const existingRows = await db
+    .select()
+    .from(educators)
+    .where(eq(educators.id, id))
+    .limit(1);
+  const existing = existingRows[0];
   if (!existing) {
     return { error: "Data pendidik tidak ditemukan." };
   }
@@ -87,13 +91,11 @@ export async function updateEducatorAction(
     return { error: parsed.error.issues[0]?.message ?? "Data tidak valid." };
   }
 
-  const photo = resolvePhoto(parsed.data.photo) ?? existing.photo;
-  if (!photo) {
-    return { error: "Foto tidak valid. Unggah ulang foto." };
-  }
+  const resolvedPhoto = resolvePhoto(parsed.data.photo);
+  const photo = resolvedPhoto === null ? existing.photo : resolvedPhoto;
 
   try {
-    db.update(educators)
+    await db.update(educators)
       .set({
         name: parsed.data.name,
         role: parsed.data.role,
@@ -105,8 +107,7 @@ export async function updateEducatorAction(
         published: parsed.data.published,
         updatedAt: new Date(),
       })
-      .where(eq(educators.id, id))
-      .run();
+      .where(eq(educators.id, id));
   } catch {
     return { error: "Gagal memperbarui data." };
   }
@@ -122,12 +123,17 @@ export async function deleteEducatorAction(id: string): Promise<{
   error?: string;
 }> {
   await assertAdmin();
-  const existing = db.select().from(educators).where(eq(educators.id, id)).get();
+  const existingRows = await db
+    .select()
+    .from(educators)
+    .where(eq(educators.id, id))
+    .limit(1);
+  const existing = existingRows[0];
   if (!existing) {
     return { error: "Data pendidik sudah tidak ada." };
   }
 
-  db.delete(educators).where(eq(educators.id, id)).run();
+  await db.delete(educators).where(eq(educators.id, id));
   revalidatePath("/guru");
   revalidatePath("/");
   revalidatePath("/admin/guru");

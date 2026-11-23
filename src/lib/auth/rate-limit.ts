@@ -14,9 +14,9 @@ export function loginIpIdentifier(ip: string): string {
   return createHash("sha256").update(`ip|${ip}`).digest("hex");
 }
 
-export function isLoginRateLimited(identifier: string): boolean {
+export async function isLoginRateLimited(identifier: string): Promise<boolean> {
   const cutoff = new Date(Date.now() - LOGIN_WINDOW_MS);
-  const failures = db
+  const failures = await db
     .select({ id: loginAttempts.id })
     .from(loginAttempts)
     .where(
@@ -25,32 +25,28 @@ export function isLoginRateLimited(identifier: string): boolean {
         eq(loginAttempts.success, false),
         gt(loginAttempts.createdAt, cutoff),
       ),
-    )
-    .all();
+    );
   return failures.length >= LOGIN_MAX_ATTEMPTS;
 }
 
-export function recordLoginFailure(identifier: string): void {
+export async function recordLoginFailure(identifier: string): Promise<void> {
   const cutoff = new Date(Date.now() - 24 * 60 * 60 * 1000);
-  db.delete(loginAttempts)
+  await db.delete(loginAttempts)
     .where(
       and(
         eq(loginAttempts.identifier, identifier),
         lt(loginAttempts.createdAt, cutoff),
       ),
-    )
-    .run();
-  db.insert(loginAttempts)
+    );
+  await db.insert(loginAttempts)
     .values({
       id: crypto.randomUUID(),
       identifier,
       success: false,
-    })
-    .run();
+    });
 }
 
-export function clearLoginFailures(identifier: string): void {
-  db.delete(loginAttempts)
-    .where(eq(loginAttempts.identifier, identifier))
-    .run();
+export async function clearLoginFailures(identifier: string): Promise<void> {
+  await db.delete(loginAttempts)
+    .where(eq(loginAttempts.identifier, identifier));
 }

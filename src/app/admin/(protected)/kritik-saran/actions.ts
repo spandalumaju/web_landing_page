@@ -20,10 +20,10 @@ export async function updateFeedbackStatusAction(
     return;
   }
 
-  db.update(feedback)
+  await db
+    .update(feedback)
     .set({ status, updatedAt: new Date() })
-    .where(eq(feedback.id, id))
-    .run();
+    .where(eq(feedback.id, id));
 
   revalidatePath("/admin/kritik-saran");
   revalidatePath("/admin");
@@ -31,7 +31,12 @@ export async function updateFeedbackStatusAction(
 
 export async function resendFeedbackAction(id: string): Promise<void> {
   await assertAdmin();
-  const item = db.select().from(feedback).where(eq(feedback.id, id)).get();
+  const itemRows = await db
+    .select()
+    .from(feedback)
+    .where(eq(feedback.id, id))
+    .limit(1);
+  const item = itemRows[0];
   if (!item) {
     return;
   }
@@ -44,14 +49,14 @@ export async function resendFeedbackAction(id: string): Promise<void> {
     createdAt: item.createdAt,
   });
 
-  db.update(feedback)
+  await db
+    .update(feedback)
     .set({
       telegramSent: result.ok,
       telegramError: result.error ?? null,
       updatedAt: new Date(),
     })
-    .where(eq(feedback.id, id))
-    .run();
+    .where(eq(feedback.id, id));
 
   revalidatePath("/admin/kritik-saran");
   revalidatePath("/admin");
@@ -62,12 +67,17 @@ export async function deleteFeedbackAction(id: string): Promise<{
   error?: string;
 }> {
   await assertAdmin();
-  const existing = db.select().from(feedback).where(eq(feedback.id, id)).get();
+  const existingRows = await db
+    .select()
+    .from(feedback)
+    .where(eq(feedback.id, id))
+    .limit(1);
+  const existing = existingRows[0];
   if (!existing) {
     return { error: "Pesan sudah tidak ada." };
   }
 
-  db.delete(feedback).where(eq(feedback.id, id)).run();
+  await db.delete(feedback).where(eq(feedback.id, id));
   revalidatePath("/admin/kritik-saran");
   revalidatePath("/admin");
   return { success: true };

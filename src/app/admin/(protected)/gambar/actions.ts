@@ -41,16 +41,16 @@ export async function updateSiteImagesAction(
   }
 
   try {
-    db.transaction((tx) => {
+    await db.transaction(async (tx) => {
       for (const item of updates) {
-        tx.update(siteImages)
+        await tx
+          .update(siteImages)
           .set({
             url: item.url,
             alt: item.alt,
             updatedAt: new Date(),
           })
-          .where(eq(siteImages.key, item.slot.key))
-          .run();
+          .where(eq(siteImages.key, item.slot.key));
       }
     });
   } catch {

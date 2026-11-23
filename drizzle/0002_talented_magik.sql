@@ -1,1 +1,0 @@
-ALTER TABLE `posts` ADD `images` text DEFAULT '[]' NOT NULL;

@@ -3,14 +3,13 @@ import { db } from "@/lib/db";
 import { educators } from "@/lib/db/schema";
 import { educators as fallback, type Educator } from "@/lib/content";
 
-export function getPublishedEducators(): Educator[] {
+export async function getPublishedEducators(): Promise<Educator[]> {
   try {
-    const rows = db
+    const rows = await db
       .select()
       .from(educators)
       .where(eq(educators.published, true))
-      .orderBy(asc(educators.sortOrder), asc(educators.name))
-      .all();
+      .orderBy(asc(educators.sortOrder), asc(educators.name));
 
     return rows.map((row) => ({
       id: row.id,

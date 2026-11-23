@@ -104,54 +104,42 @@ export function ContactSection() {
 
           <div className="lg:col-span-7">
             <Reveal variant="scale" delay={0.1}>
-              <div className="gloss-sheen relative aspect-[4/3] overflow-hidden rounded-[32px] bg-[linear-gradient(135deg,#f7fbf2,#e2f0d8)] shadow-[0_24px_60px_rgba(24,56,35,0.1)] ring-1 ring-white/70 sm:aspect-[16/11]">
-                <div
-                  className="absolute inset-0 opacity-70"
-                  style={{
-                    backgroundImage:
-                      "linear-gradient(to right, rgba(47,93,59,0.14) 1px, transparent 1px), linear-gradient(to bottom, rgba(47,93,59,0.14) 1px, transparent 1px)",
-                    backgroundSize: "54px 54px",
-                  }}
-                  aria-hidden="true"
+              <div className="relative aspect-[4/3] overflow-hidden rounded-[32px] border border-white/70 bg-[linear-gradient(135deg,#f7fbf2,#e2f0d8)] shadow-[0_24px_60px_rgba(24,56,35,0.1)] sm:aspect-[16/11]">
+                <iframe
+                  src={`https://www.google.com/maps?q=${encodeURIComponent(
+                    `${site.name}, ${site.address}`,
+                  )}&z=16&output=embed`}
+                  title="Peta lokasi SMP Negeri 2 Ambulu di Google Maps"
+                  loading="lazy"
+                  allowFullScreen
+                  referrerPolicy="no-referrer-when-downgrade"
+                  className="absolute inset-0 h-full w-full border-0"
                 />
 
-                <div className="absolute left-5 top-5 sm:left-7 sm:top-7">
-                  <p className="eyebrow text-[11px] text-matcha-deep">
-                    Lokasi sekolah
-                  </p>
-                  <p className="mt-1 font-display text-xl font-semibold tracking-[-0.025em] text-ink">
-                    Sabrang, Ambulu
-                  </p>
-                </div>
-
-                <div className="absolute left-1/2 top-[46%] -translate-x-1/2 -translate-y-1/2">
-                  <div className="relative flex h-36 w-36 items-center justify-center rounded-full border border-matcha-deep/15 sm:h-44 sm:w-44">
-                    <div className="absolute inset-5 rounded-full border border-matcha-deep/25" />
-                    <div className="absolute inset-10 rounded-full border border-matcha-deep/35" />
-                    <div className="relative flex h-11 w-11 items-center justify-center rounded-full gloss-button text-cream shadow-[0_14px_40px_rgba(24,56,35,0.28)]">
-                      <MapPin size={17} strokeWidth={1.7} aria-hidden="true" />
-                    </div>
+                <div className="pointer-events-none absolute left-4 top-4 max-w-[min(19rem,calc(100%-2rem))] sm:left-5 sm:top-5">
+                  <div className="pointer-events-auto rounded-[18px] border border-white/70 bg-cream/95 p-4 shadow-[0_16px_40px_rgba(24,56,35,0.14)] backdrop-blur-md">
+                    <p className="flex items-center gap-1.5 eyebrow text-[11px] text-matcha-deep">
+                      <MapPin size={12} aria-hidden="true" />
+                      Lokasi sekolah
+                    </p>
+                    <p className="mt-1.5 font-display text-lg font-semibold leading-tight tracking-[-0.025em] text-ink">
+                      SMP Negeri 2 Ambulu
+                    </p>
+                    <p className="mt-1 text-[11px] leading-relaxed text-muted">
+                      {site.address}
+                    </p>
                   </div>
                 </div>
 
-                <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between gap-4 sm:bottom-5 sm:left-5 sm:right-5">
-                  <p className="eyebrow text-[11px] text-ink-soft">
-                    8°20′ S · 113°36′ E
-                  </p>
-                  <a
-                    href={site.mapsUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="group inline-flex items-center gap-2 rounded-full bg-[linear-gradient(135deg,#1c2d21,#0b120d)] px-4 py-3 text-[11px] font-medium tracking-[-0.01em] text-cream shadow-[inset_0_1px_0_rgba(255,255,255,0.18)] transition-colors hover:brightness-110"
-                  >
-                    Google Maps
-                    <ArrowUpRight
-                      size={13}
-                      className="link-arrow"
-                      aria-hidden="true"
-                    />
-                  </a>
-                </div>
+                <a
+                  href={site.mapsUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="absolute bottom-4 right-4 inline-flex items-center gap-2 rounded-full bg-[linear-gradient(135deg,#1c2d21,#0b120d)] px-4 py-3 text-[11px] font-medium tracking-[-0.01em] text-cream shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_12px_28px_rgba(11,18,13,0.2)] transition-colors hover:brightness-110 sm:bottom-5 sm:right-5"
+                >
+                  Buka di Google Maps
+                  <ArrowUpRight size={13} className="link-arrow" aria-hidden="true" />
+                </a>
               </div>
             </Reveal>
 

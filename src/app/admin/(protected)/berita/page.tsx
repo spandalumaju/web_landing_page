@@ -11,13 +11,13 @@ export const metadata: Metadata = {
 
 export const dynamic = "force-dynamic";
 
-export default function AdminPostsPage() {
-  const rows: PostRow[] = db
-    .select()
-    .from(posts)
-    .orderBy(desc(posts.updatedAt))
-    .all()
-    .map((post) => {
+export default async function AdminPostsPage() {
+  const rows: PostRow[] = (
+    await db
+      .select()
+      .from(posts)
+      .orderBy(desc(posts.updatedAt))
+  ).map((post) => {
       const gallery = parsePostImages(post.images);
       return {
         id: post.id,

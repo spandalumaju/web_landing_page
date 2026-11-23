@@ -53,7 +53,7 @@ export default async function AdminFeedbackPage({
     ? status
     : "semua";
   const query = (q ?? "").trim().toLowerCase();
-  const all = db.select().from(feedback).orderBy(desc(feedback.createdAt)).all();
+  const all = await db.select().from(feedback).orderBy(desc(feedback.createdAt));
   const searched = query
     ? all.filter((item) =>
         [item.name, item.contact, item.message, item.category]

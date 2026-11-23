@@ -1,29 +1,25 @@
 import crypto from "node:crypto";
-import fs from "node:fs";
-import path from "node:path";
-import Database from "better-sqlite3";
+import { Pool } from "pg";
 
-const databasePath =
-  process.env.DATABASE_PATH ?? path.join(process.cwd(), "data", "smpn2ambulu.db");
+const connectionString = process.env.DATABASE_URL;
 const email = process.env.ADMIN_EMAIL?.trim().toLowerCase();
 const password = process.env.ADMIN_PASSWORD;
 const name = process.env.ADMIN_NAME?.trim() || "Admin Sekolah";
 
+if (!connectionString) {
+  console.error("DATABASE_URL wajib diisi.");
+  process.exit(1);
+}
 if (!email || !password) {
   console.log("Bootstrap admin dilewati: ADMIN_EMAIL/ADMIN_PASSWORD tidak diisi.");
   process.exit(0);
 }
 
-fs.mkdirSync(path.dirname(databasePath), { recursive: true });
-const sqlite = new Database(databasePath);
-sqlite.pragma("journal_mode = WAL");
+const pool = new Pool({ connectionString, max: 1 });
+const existing = await pool.query("select id from users where email = $1 limit 1", [email]);
 
-const existing = sqlite
-  .prepare("select id from users where email = ? limit 1")
-  .get(email);
-
-if (existing) {
-  sqlite.close();
+if ((existing.rowCount ?? 0) > 0) {
+  await pool.end();
   console.log(`Admin sudah ada: ${email}`);
   process.exit(0);
 }
@@ -37,12 +33,10 @@ const hash = crypto
   .scryptSync(password, salt, KEY_LENGTH, { N: SCRYPT_N, r: SCRYPT_R, p: SCRYPT_P })
   .toString("hex");
 const passwordHash = `scrypt$${SCRYPT_N}$${SCRYPT_R}$${SCRYPT_P}$${salt}$${hash}`;
-const now = Date.now();
 
-sqlite
-  .prepare(
-    "insert into users (id, email, name, role, password_hash, created_at, updated_at) values (?, ?, ?, 'admin', ?, ?, ?)",
-  )
-  .run(crypto.randomUUID(), email, name, passwordHash, now, now);
-sqlite.close();
+await pool.query(
+  "insert into users (id, email, name, role, password_hash) values ($1, $2, $3, 'admin', $4)",
+  [crypto.randomUUID(), email, name, passwordHash],
+);
+await pool.end();
 console.log(`Admin dibuat: ${email}`);

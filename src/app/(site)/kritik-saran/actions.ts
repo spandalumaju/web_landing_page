@@ -52,7 +52,7 @@ export async function submitFeedbackAction(
   const ipHash = createHash("sha256").update(ip).digest("hex");
   const cutoff = new Date(Date.now() - RATE_WINDOW_MS);
 
-  const recent = db
+  const recent = await db
     .select({ id: feedbackRateLimits.id })
     .from(feedbackRateLimits)
     .where(
@@ -61,7 +61,7 @@ export async function submitFeedbackAction(
         gt(feedbackRateLimits.createdAt, cutoff),
       ),
     )
-    .all();
+    ;
 
   if (recent.length >= RATE_LIMIT) {
     return {
@@ -74,19 +74,17 @@ export async function submitFeedbackAction(
   const createdAt = new Date();
 
   try {
-    db.insert(feedbackRateLimits)
-      .values({ id: crypto.randomUUID(), ipHash })
-      .run();
-    db.delete(feedbackRateLimits)
+    await db.insert(feedbackRateLimits)
+      .values({ id: crypto.randomUUID(), ipHash });
+    await db.delete(feedbackRateLimits)
       .where(
         and(
           eq(feedbackRateLimits.ipHash, ipHash),
           lt(feedbackRateLimits.createdAt, new Date(Date.now() - 24 * RATE_WINDOW_MS)),
         ),
-      )
-      .run();
+      );
 
-    db.insert(feedback)
+    await db.insert(feedback)
       .values({
         id,
         name: parsed.data.name?.trim() || null,
@@ -98,8 +96,7 @@ export async function submitFeedbackAction(
         userAgent: requestHeaders.get("user-agent")?.slice(0, 300) ?? null,
         createdAt,
         updatedAt: createdAt,
-      })
-      .run();
+      });
   } catch {
     return { error: "Pesan gagal disimpan. Coba lagi." };
   }
@@ -112,13 +109,12 @@ export async function submitFeedbackAction(
     createdAt,
   });
 
-  db.update(feedback)
+  await db.update(feedback)
     .set({
       telegramSent: telegram.ok,
       telegramError: telegram.error ?? null,
     })
-    .where(eq(feedback.id, id))
-    .run();
+    .where(eq(feedback.id, id));
 
   revalidatePath("/admin");
   revalidatePath("/admin/kritik-saran");

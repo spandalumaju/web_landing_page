@@ -5,8 +5,8 @@ import { ParallaxImage } from "@/components/motion/parallax-image";
 import { Reveal } from "@/components/motion/reveal";
 import { SectionLabel } from "@/components/site/section-label";
 
-export function ProfileSection() {
-  const profileImages = getSiteImagesByGroup("profile");
+export async function ProfileSection() {
+  const profileImages = await getSiteImagesByGroup("profile");
   const mainImage = profileImages.find((image) => image.key === "profile-main");
   const secondaryImage = profileImages.find(
     (image) => image.key === "profile-secondary",

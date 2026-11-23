@@ -30,11 +30,16 @@ function resolveSlug(value: string | undefined, title: string): string {
   return slugify(value?.trim() || title);
 }
 
-function slugExists(slug: string, excludeId?: string): boolean {
+async function slugExists(slug: string, excludeId?: string): Promise<boolean> {
   const conditions = excludeId
     ? and(eq(posts.slug, slug), ne(posts.id, excludeId))
     : eq(posts.slug, slug);
-  return Boolean(db.select({ id: posts.id }).from(posts).where(conditions).get());
+  const rows = await db
+    .select({ id: posts.id })
+    .from(posts)
+    .where(conditions)
+    .limit(1);
+  return Boolean(rows[0]);
 }
 
 function resolveMedia(cover: string | undefined, images: string[]) {
@@ -67,7 +72,7 @@ export async function createPostAction(
   if (!slug) {
     return { error: "Slug tidak valid." };
   }
-  if (slugExists(slug)) {
+  if (await slugExists(slug)) {
     return { error: "Slug sudah dipakai berita lain." };
   }
 
@@ -78,7 +83,7 @@ export async function createPostAction(
 
   const id = randomUUID();
   try {
-    db.insert(posts)
+    await db.insert(posts)
       .values({
         id,
         title: parsed.data.title,
@@ -90,8 +95,7 @@ export async function createPostAction(
         cover: media.cover,
         images: JSON.stringify(media.images),
         publishedAt: parsed.data.status === "published" ? new Date() : null,
-      })
-      .run();
+      });
   } catch {
     return { error: "Gagal menyimpan berita." };
   }
@@ -108,7 +112,12 @@ export async function updatePostAction(
   formData: FormData,
 ): Promise<PostFormState> {
   await assertAdmin();
-  const existing = db.select().from(posts).where(eq(posts.id, id)).get();
+  const existingRows = await db
+    .select()
+    .from(posts)
+    .where(eq(posts.id, id))
+    .limit(1);
+  const existing = existingRows[0];
   if (!existing) {
     return { error: "Berita tidak ditemukan." };
   }
@@ -122,7 +131,7 @@ export async function updatePostAction(
   if (!slug) {
     return { error: "Slug tidak valid." };
   }
-  if (slugExists(slug, id)) {
+  if (await slugExists(slug, id)) {
     return { error: "Slug sudah dipakai berita lain." };
   }
 
@@ -132,7 +141,7 @@ export async function updatePostAction(
   }
 
   try {
-    db.update(posts)
+    await db.update(posts)
       .set({
         title: parsed.data.title,
         slug,
@@ -148,8 +157,7 @@ export async function updatePostAction(
             : existing.publishedAt,
         updatedAt: new Date(),
       })
-      .where(eq(posts.id, id))
-      .run();
+      .where(eq(posts.id, id));
   } catch {
     return { error: "Gagal memperbarui berita." };
   }
@@ -166,12 +174,17 @@ export async function deletePostAction(id: string): Promise<{
   error?: string;
 }> {
   await assertAdmin();
-  const existing = db.select().from(posts).where(eq(posts.id, id)).get();
+  const existingRows = await db
+    .select()
+    .from(posts)
+    .where(eq(posts.id, id))
+    .limit(1);
+  const existing = existingRows[0];
   if (!existing) {
     return { error: "Berita sudah tidak ada." };
   }
 
-  db.delete(posts).where(eq(posts.id, id)).run();
+  await db.delete(posts).where(eq(posts.id, id));
   revalidatePath("/");
   revalidatePath("/berita");
   revalidatePath(`/berita/${existing.slug}`);

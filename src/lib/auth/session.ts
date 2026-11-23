@@ -21,7 +21,7 @@ export async function createSession(userId: string): Promise<void> {
   const expiresAt = new Date(Date.now() + SESSION_DURATION_MS);
   const ip = await getClientIp();
 
-  db.insert(sessions)
+  await db.insert(sessions)
     .values({
       id: crypto.randomUUID(),
       userId,
@@ -29,8 +29,7 @@ export async function createSession(userId: string): Promise<void> {
       expiresAt,
       ipHash: createHash("sha256").update(ip).digest("hex"),
       userAgent: requestHeaders.get("user-agent")?.slice(0, 300) ?? null,
-    })
-    .run();
+    });
 
   const cookieStore = await cookies();
   cookieStore.set(SESSION_COOKIE, token, {
@@ -49,9 +48,8 @@ export async function destroySession(): Promise<void> {
   const token = cookieStore.get(SESSION_COOKIE)?.value;
 
   if (token) {
-    db.delete(sessions)
-      .where(eq(sessions.tokenHash, hashToken(token)))
-      .run();
+    await db.delete(sessions)
+      .where(eq(sessions.tokenHash, hashToken(token)));
   }
 
   cookieStore.delete(SESSION_COOKIE);
@@ -64,7 +62,7 @@ export async function getSession() {
     return null;
   }
 
-  const row = db
+  const rows = await db
     .select({
       session: sessions,
       user: users,
@@ -77,7 +75,8 @@ export async function getSession() {
         gt(sessions.expiresAt, new Date()),
       ),
     )
-    .get();
+    .limit(1);
+  const row = rows[0];
 
   if (!row) {
     return null;

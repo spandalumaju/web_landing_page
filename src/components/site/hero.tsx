@@ -6,8 +6,8 @@ import { HeroAlbum } from "@/components/site/hero-album";
 import { HeroHeadline } from "@/components/site/hero-headline";
 import { Reveal } from "@/components/motion/reveal";
 
-export function Hero() {
-  const heroPhotos = getSiteImagesByGroup("hero")
+export async function Hero() {
+  const heroPhotos = (await getSiteImagesByGroup("hero"))
     .filter((image) => image.url)
     .map((image) => ({
       src: image.url,

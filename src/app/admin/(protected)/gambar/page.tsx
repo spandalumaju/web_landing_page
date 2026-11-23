@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export const dynamic = "force-dynamic";
 
-export default function AdminSiteImagesPage() {
-  const rows = getSiteImages();
+export default async function AdminSiteImagesPage() {
+  const rows = await getSiteImages();
   return <SiteImagesManager rows={rows} action={updateSiteImagesAction} />;
 }

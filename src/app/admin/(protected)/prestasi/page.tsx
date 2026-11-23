@@ -13,13 +13,13 @@ export const metadata: Metadata = {
 
 export const dynamic = "force-dynamic";
 
-export default function AdminAchievementsPage() {
-  const rows: AchievementRow[] = db
-    .select()
-    .from(achievements)
-    .orderBy(desc(achievements.featured), desc(achievements.year), asc(achievements.sortOrder))
-    .all()
-    .map((row) => ({
+export default async function AdminAchievementsPage() {
+  const rows: AchievementRow[] = (
+    await db
+      .select()
+      .from(achievements)
+      .orderBy(desc(achievements.featured), desc(achievements.year), asc(achievements.sortOrder))
+  ).map((row) => ({
       id: row.id,
       title: row.title,
       recipient: row.recipient,

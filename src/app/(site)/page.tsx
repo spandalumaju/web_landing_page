@@ -18,10 +18,10 @@ import { getSiteImagesByGroup } from "@/lib/db/queries/site-images";
 
 export const dynamic = "force-dynamic";
 
-export default function HomePage() {
-  const news = getPublishedPosts();
-  const achievements = getPublishedAchievements();
-  const gallery = getSiteImagesByGroup("gallery")
+export default async function HomePage() {
+  const news = await getPublishedPosts();
+  const achievements = await getPublishedAchievements();
+  const gallery = (await getSiteImagesByGroup("gallery"))
     .filter((image) => image.url)
     .map((image) => ({
       src: image.url,

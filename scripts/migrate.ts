@@ -2,8 +2,15 @@ import { loadEnvConfig } from "@next/env";
 
 loadEnvConfig(process.cwd());
 
-import { migrate } from "drizzle-orm/better-sqlite3/migrator";
-import { db, databasePath } from "@/lib/db";
+async function main() {
+  const { migrate } = await import("drizzle-orm/node-postgres/migrator");
+  const { db, closeDb } = await import("@/lib/db");
+  await migrate(db, { migrationsFolder: "./drizzle" });
+  console.log("Database PostgreSQL siap.");
+  await closeDb();
+}
 
-migrate(db, { migrationsFolder: "./drizzle" });
-console.log(`Database siap: ${databasePath}`);
+main().catch((error) => {
+  console.error(error);
+  process.exitCode = 1;
+});

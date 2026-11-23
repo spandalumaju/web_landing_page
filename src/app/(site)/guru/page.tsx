@@ -48,8 +48,8 @@ const jsonLd = {
 
 const jsonLdString = JSON.stringify(jsonLd).replace(/</g, "\\u003c");
 
-export default function GuruPage() {
-  const educatorList = getPublishedEducators();
+export default async function GuruPage() {
+  const educatorList = await getPublishedEducators();
 
   return (
     <>

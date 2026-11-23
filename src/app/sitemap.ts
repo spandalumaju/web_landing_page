@@ -3,7 +3,7 @@ import { getPublishedPosts } from "@/lib/db/queries/content";
 
 export const revalidate = 3600;
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   return [
     {
       url: "https://smpn2ambulu.sch.id",
@@ -29,7 +29,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 0.8,
     },
-    ...getPublishedPosts().map((post) => ({
+    ...(await getPublishedPosts()).map((post) => ({
       url: `https://smpn2ambulu.sch.id/berita/${post.slug}`,
       lastModified: new Date(),
       changeFrequency: "monthly" as const,

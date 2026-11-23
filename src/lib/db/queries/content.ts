@@ -42,14 +42,13 @@ function formatDate(value: Date | null): string {
   }).format(value);
 }
 
-export function getPublishedPosts(): PostItem[] {
+export async function getPublishedPosts(): Promise<PostItem[]> {
   try {
-    const rows = db
+    const rows = await db
       .select()
       .from(posts)
       .where(eq(posts.status, "published"))
-      .orderBy(desc(posts.publishedAt), desc(posts.createdAt))
-      .all();
+      .orderBy(desc(posts.publishedAt), desc(posts.createdAt));
 
     return rows.map((post) => ({
       slug: post.slug,
@@ -66,13 +65,12 @@ export function getPublishedPosts(): PostItem[] {
   }
 }
 
-export function getPublishedAchievements(): Achievement[] {
+export async function getPublishedAchievements(): Promise<Achievement[]> {
   try {
-    const rows = db
+    const rows = await db
       .select()
       .from(achievements)
-      .orderBy(desc(achievements.featured), desc(achievements.year), asc(achievements.sortOrder))
-      .all();
+      .orderBy(desc(achievements.featured), desc(achievements.year), asc(achievements.sortOrder));
 
     return rows.map((achievement) => ({
       title: achievement.title,
@@ -89,15 +87,14 @@ export function getPublishedAchievements(): Achievement[] {
   }
 }
 
-export function getPublishedPostBySlug(slug: string): PostRecord | null {
+export async function getPublishedPostBySlug(slug: string): Promise<PostRecord | null> {
   try {
-    return (
-      db
-        .select()
-        .from(posts)
-        .where(and(eq(posts.slug, slug), eq(posts.status, "published")))
-        .get() ?? null
-    );
+    const rows = await db
+      .select()
+      .from(posts)
+      .where(and(eq(posts.slug, slug), eq(posts.status, "published")))
+      .limit(1);
+    return rows[0] ?? null;
   } catch {
     return null;
   }

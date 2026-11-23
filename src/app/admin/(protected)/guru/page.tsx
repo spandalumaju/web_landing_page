@@ -10,13 +10,13 @@ export const metadata: Metadata = {
 
 export const dynamic = "force-dynamic";
 
-export default function AdminEducatorsPage() {
-  const rows: EducatorRow[] = db
-    .select()
-    .from(educators)
-    .orderBy(asc(educators.sortOrder), desc(educators.updatedAt))
-    .all()
-    .map((row) => ({
+export default async function AdminEducatorsPage() {
+  const rows: EducatorRow[] = (
+    await db
+      .select()
+      .from(educators)
+      .orderBy(asc(educators.sortOrder), desc(educators.updatedAt))
+  ).map((row) => ({
       id: row.id,
       name: row.name,
       role: row.role,

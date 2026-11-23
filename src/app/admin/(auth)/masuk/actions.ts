@@ -51,24 +51,29 @@ export async function loginAction(
   const ipIdentifier = loginIpIdentifier(ip);
 
   if (
-    isLoginRateLimited(identifier) ||
-    isLoginRateLimited(ipIdentifier)
+    (await isLoginRateLimited(identifier)) ||
+    (await isLoginRateLimited(ipIdentifier))
   ) {
     return {
       error: "Terlalu banyak percobaan. Coba lagi dalam 15 menit.",
     };
   }
 
-  const user = db.select().from(users).where(eq(users.email, email)).get();
+  const userRows = await db
+    .select()
+    .from(users)
+    .where(eq(users.email, email))
+    .limit(1);
+  const user = userRows[0];
 
   if (!user || !verifyPassword(parsed.data.password, user.passwordHash)) {
-    recordLoginFailure(identifier);
-    recordLoginFailure(ipIdentifier);
+    await recordLoginFailure(identifier);
+    await recordLoginFailure(ipIdentifier);
     return { error: "Email atau password salah." };
   }
 
-  clearLoginFailures(identifier);
-  clearLoginFailures(ipIdentifier);
+  await clearLoginFailures(identifier);
+  await clearLoginFailures(ipIdentifier);
   await createSession(user.id);
   redirect("/admin");
 }

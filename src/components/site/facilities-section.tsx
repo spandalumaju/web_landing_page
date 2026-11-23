@@ -19,8 +19,8 @@ const facilityList = [
   "Ruang guru",
 ];
 
-export function FacilitiesSection() {
-  const facilityImages = getSiteImagesByGroup("facilities");
+export async function FacilitiesSection() {
+  const facilityImages = await getSiteImagesByGroup("facilities");
   const library = facilityImages.find((image) => image.key === "facility-library");
   const smallFacilities = [
     {

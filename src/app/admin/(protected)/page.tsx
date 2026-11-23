@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { desc, sql } from "drizzle-orm";
+import { desc, eq, sql } from "drizzle-orm";
 import {
   ArrowUpRight,
   Newspaper,
@@ -18,43 +18,49 @@ export const metadata: Metadata = {
 
 export default async function AdminDashboardPage() {
   const session = await getSession();
-  const recentEducators = db
-    .select()
-    .from(educators)
-    .orderBy(desc(educators.updatedAt))
-    .limit(5)
-    .all();
-  const recentPosts = db
-    .select()
-    .from(posts)
-    .orderBy(desc(posts.updatedAt))
-    .limit(4)
-    .all();
-  const recentFeedback = db
-    .select()
-    .from(feedback)
-    .orderBy(desc(feedback.createdAt))
-    .limit(3)
-    .all();
+  const [
+    recentEducators,
+    recentPosts,
+    recentFeedback,
+    educatorCount,
+    publishedEducatorCount,
+    postCount,
+    achievementCount,
+    feedbackCount,
+    newFeedbackCount,
+  ] = await Promise.all([
+    db
+      .select()
+      .from(educators)
+      .orderBy(desc(educators.updatedAt))
+      .limit(5),
+    db.select().from(posts).orderBy(desc(posts.updatedAt)).limit(4),
+    db
+      .select()
+      .from(feedback)
+      .orderBy(desc(feedback.createdAt))
+      .limit(3),
+    db.select({ value: sql<number>`count(*)` }).from(educators),
+    db
+      .select({ value: sql<number>`count(*)` })
+      .from(educators)
+      .where(eq(educators.published, true)),
+    db.select({ value: sql<number>`count(*)` }).from(posts),
+    db.select({ value: sql<number>`count(*)` }).from(achievements),
+    db.select({ value: sql<number>`count(*)` }).from(feedback),
+    db
+      .select({ value: sql<number>`count(*)` })
+      .from(feedback)
+      .where(eq(feedback.status, "baru")),
+  ]);
+
   const counts = {
-    educators: db.select({ value: sql<number>`count(*)` }).from(educators).get()?.value ?? 0,
-    publishedEducators:
-      db
-        .select({ value: sql<number>`count(*)` })
-        .from(educators)
-        .where(sql`${educators.published} = 1`)
-        .get()?.value ?? 0,
-    posts: db.select({ value: sql<number>`count(*)` }).from(posts).get()?.value ?? 0,
-    achievements:
-      db.select({ value: sql<number>`count(*)` }).from(achievements).get()?.value ?? 0,
-    feedback:
-      db.select({ value: sql<number>`count(*)` }).from(feedback).get()?.value ?? 0,
-    newFeedback:
-      db
-        .select({ value: sql<number>`count(*)` })
-        .from(feedback)
-        .where(sql`${feedback.status} = 'baru'`)
-        .get()?.value ?? 0,
+    educators: Number(educatorCount[0]?.value ?? 0),
+    publishedEducators: Number(publishedEducatorCount[0]?.value ?? 0),
+    posts: Number(postCount[0]?.value ?? 0),
+    achievements: Number(achievementCount[0]?.value ?? 0),
+    feedback: Number(feedbackCount[0]?.value ?? 0),
+    newFeedback: Number(newFeedbackCount[0]?.value ?? 0),
   };
 
   return (

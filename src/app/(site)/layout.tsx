@@ -8,8 +8,8 @@ import { getSiteImagesByGroup } from "@/lib/db/queries/site-images";
 
 export const dynamic = "force-dynamic";
 
-export default function SiteLayout({ children }: { children: ReactNode }) {
-  const introPhotos = getSiteImagesByGroup("hero")
+export default async function SiteLayout({ children }: { children: ReactNode }) {
+  const introPhotos = (await getSiteImagesByGroup("hero"))
     .filter((image) => image.url)
     .slice(0, 5)
     .map((image) => ({ src: image.url, alt: image.alt }));

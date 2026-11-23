@@ -31,7 +31,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const post = getPublishedPostBySlug(slug);
+  const post = await getPublishedPostBySlug(slug);
   if (!post) {
     return { title: "Berita tidak ditemukan" };
   }
@@ -62,12 +62,12 @@ export default async function BeritaDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const post = getPublishedPostBySlug(slug);
+  const post = await getPublishedPostBySlug(slug);
   if (!post) {
     notFound();
   }
 
-  const related = getPublishedPosts()
+  const related = (await getPublishedPosts())
     .filter((item) => item.slug !== post.slug)
     .slice(0, 2);
   const html = sanitizeArticleHtml(post.contentHtml || `<p>${post.excerpt}</p>`);

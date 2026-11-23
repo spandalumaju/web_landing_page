@@ -1,15 +1,22 @@
-import { index, integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import {
+  boolean,
+  index,
+  integer,
+  pgTable,
+  text,
+  timestamp,
+} from "drizzle-orm/pg-core";
 
 const timestamps = {
-  createdAt: integer("created_at", { mode: "timestamp_ms" })
+  createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()
-    .$defaultFn(() => new Date()),
-  updatedAt: integer("updated_at", { mode: "timestamp_ms" })
+    .defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
     .notNull()
-    .$defaultFn(() => new Date()),
+    .defaultNow(),
 };
 
-export const users = sqliteTable("users", {
+export const users = pgTable("users", {
   id: text("id").primaryKey(),
   email: text("email").notNull().unique(),
   name: text("name").notNull(),
@@ -18,7 +25,7 @@ export const users = sqliteTable("users", {
   ...timestamps,
 });
 
-export const sessions = sqliteTable(
+export const sessions = pgTable(
   "sessions",
   {
     id: text("id").primaryKey(),
@@ -26,30 +33,35 @@ export const sessions = sqliteTable(
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
     tokenHash: text("token_hash").notNull().unique(),
-    expiresAt: integer("expires_at", { mode: "timestamp_ms" }).notNull(),
+    expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
     ipHash: text("ip_hash"),
     userAgent: text("user_agent"),
-    createdAt: integer("created_at", { mode: "timestamp_ms" })
+    createdAt: timestamp("created_at", { withTimezone: true })
       .notNull()
-      .$defaultFn(() => new Date()),
+      .defaultNow(),
   },
   (table) => [index("sessions_user_idx").on(table.userId)],
 );
 
-export const loginAttempts = sqliteTable(
+export const loginAttempts = pgTable(
   "login_attempts",
   {
     id: text("id").primaryKey(),
     identifier: text("identifier").notNull(),
-    success: integer("success", { mode: "boolean" }).notNull().default(false),
-    createdAt: integer("created_at", { mode: "timestamp_ms" })
+    success: boolean("success").notNull().default(false),
+    createdAt: timestamp("created_at", { withTimezone: true })
       .notNull()
-      .$defaultFn(() => new Date()),
+      .defaultNow(),
   },
-  (table) => [index("login_attempts_identifier_idx").on(table.identifier, table.createdAt)],
+  (table) => [
+    index("login_attempts_identifier_idx").on(
+      table.identifier,
+      table.createdAt,
+    ),
+  ],
 );
 
-export const siteImages = sqliteTable(
+export const siteImages = pgTable(
   "site_images",
   {
     key: text("key").primaryKey(),
@@ -58,14 +70,14 @@ export const siteImages = sqliteTable(
     alt: text("alt").notNull().default(""),
     url: text("url").notNull().default(""),
     sortOrder: integer("sort_order").notNull().default(0),
-    updatedAt: integer("updated_at", { mode: "timestamp_ms" })
+    updatedAt: timestamp("updated_at", { withTimezone: true })
       .notNull()
-      .$defaultFn(() => new Date()),
+      .defaultNow(),
   },
   (table) => [index("site_images_group_idx").on(table.group, table.sortOrder)],
 );
 
-export const educators = sqliteTable(
+export const educators = pgTable(
   "educators",
   {
     id: text("id").primaryKey(),
@@ -76,7 +88,7 @@ export const educators = sqliteTable(
     quote: text("quote").notNull().default(""),
     level: integer("level").notNull().default(3),
     sortOrder: integer("sort_order").notNull().default(0),
-    published: integer("published", { mode: "boolean" }).notNull().default(true),
+    published: boolean("published").notNull().default(true),
     ...timestamps,
   },
   (table) => [
@@ -85,7 +97,7 @@ export const educators = sqliteTable(
   ],
 );
 
-export const posts = sqliteTable(
+export const posts = pgTable(
   "posts",
   {
     id: text("id").primaryKey(),
@@ -97,7 +109,7 @@ export const posts = sqliteTable(
     status: text("status").notNull().default("draft"),
     cover: text("cover"),
     images: text("images").notNull().default("[]"),
-    publishedAt: integer("published_at", { mode: "timestamp_ms" }),
+    publishedAt: timestamp("published_at", { withTimezone: true }),
     ...timestamps,
   },
   (table) => [
@@ -106,7 +118,7 @@ export const posts = sqliteTable(
   ],
 );
 
-export const achievements = sqliteTable(
+export const achievements = pgTable(
   "achievements",
   {
     id: text("id").primaryKey(),
@@ -115,15 +127,16 @@ export const achievements = sqliteTable(
     level: text("level").notNull().default("Kabupaten"),
     year: integer("year").notNull(),
     category: text("category").notNull().default("Akademik"),
-    featured: integer("featured", { mode: "boolean" }).notNull().default(false),
+    featured: boolean("featured").notNull().default(false),
     sortOrder: integer("sort_order").notNull().default(0),
     ...timestamps,
   },
-  (table) => [index("achievements_year_idx").on(table.year, table.sortOrder)],
+  (table) => [
+    index("achievements_year_idx").on(table.year, table.sortOrder),
+  ],
 );
 
-
-export const feedback = sqliteTable(
+export const feedback = pgTable(
   "feedback",
   {
     id: text("id").primaryKey(),
@@ -134,9 +147,7 @@ export const feedback = sqliteTable(
     status: text("status").notNull().default("baru"),
     ipHash: text("ip_hash"),
     userAgent: text("user_agent"),
-    telegramSent: integer("telegram_sent", { mode: "boolean" })
-      .notNull()
-      .default(false),
+    telegramSent: boolean("telegram_sent").notNull().default(false),
     telegramError: text("telegram_error"),
     ...timestamps,
   },
@@ -146,16 +157,18 @@ export const feedback = sqliteTable(
   ],
 );
 
-export const feedbackRateLimits = sqliteTable(
+export const feedbackRateLimits = pgTable(
   "feedback_rate_limits",
   {
     id: text("id").primaryKey(),
     ipHash: text("ip_hash").notNull(),
-    createdAt: integer("created_at", { mode: "timestamp_ms" })
+    createdAt: timestamp("created_at", { withTimezone: true })
       .notNull()
-      .$defaultFn(() => new Date()),
+      .defaultNow(),
   },
-  (table) => [index("feedback_rate_ip_idx").on(table.ipHash, table.createdAt)],
+  (table) => [
+    index("feedback_rate_ip_idx").on(table.ipHash, table.createdAt),
+  ],
 );
 
 export type User = typeof users.$inferSelect;

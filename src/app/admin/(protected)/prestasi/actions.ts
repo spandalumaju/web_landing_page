@@ -34,7 +34,7 @@ export async function createAchievementAction(
   }
 
   try {
-    db.insert(achievements)
+    await db.insert(achievements)
       .values({
         id: randomUUID(),
         title: parsed.data.title,
@@ -44,8 +44,7 @@ export async function createAchievementAction(
         category: parsed.data.category,
         featured: parsed.data.featured,
         sortOrder: parsed.data.sortOrder,
-      })
-      .run();
+      });
   } catch {
     return { error: "Gagal menyimpan prestasi." };
   }
@@ -61,11 +60,12 @@ export async function updateAchievementAction(
   formData: FormData,
 ): Promise<AchievementFormState> {
   await assertAdmin();
-  const existing = db
+  const existingRows = await db
     .select()
     .from(achievements)
     .where(eq(achievements.id, id))
-    .get();
+    .limit(1);
+  const existing = existingRows[0];
   if (!existing) {
     return { error: "Prestasi tidak ditemukan." };
   }
@@ -76,7 +76,7 @@ export async function updateAchievementAction(
   }
 
   try {
-    db.update(achievements)
+    await db.update(achievements)
       .set({
         title: parsed.data.title,
         recipient: parsed.data.recipient,
@@ -87,8 +87,7 @@ export async function updateAchievementAction(
         sortOrder: parsed.data.sortOrder,
         updatedAt: new Date(),
       })
-      .where(eq(achievements.id, id))
-      .run();
+      .where(eq(achievements.id, id));
   } catch {
     return { error: "Gagal memperbarui prestasi." };
   }
@@ -103,16 +102,17 @@ export async function deleteAchievementAction(id: string): Promise<{
   error?: string;
 }> {
   await assertAdmin();
-  const existing = db
+  const existingRows = await db
     .select()
     .from(achievements)
     .where(eq(achievements.id, id))
-    .get();
+    .limit(1);
+  const existing = existingRows[0];
   if (!existing) {
     return { error: "Prestasi sudah tidak ada." };
   }
 
-  db.delete(achievements).where(eq(achievements.id, id)).run();
+  await db.delete(achievements).where(eq(achievements.id, id));
   revalidatePath("/");
   revalidatePath("/admin/prestasi");
   return { success: true };

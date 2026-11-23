@@ -16,7 +16,12 @@ export default async function EditPostPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const post = db.select().from(posts).where(eq(posts.id, id)).get();
+  const rows = await db
+    .select()
+    .from(posts)
+    .where(eq(posts.id, id))
+    .limit(1);
+  const post = rows[0];
   if (!post) {
     notFound();
   }

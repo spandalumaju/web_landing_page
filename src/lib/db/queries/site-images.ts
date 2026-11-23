@@ -15,8 +15,20 @@ export type SiteImageRow = {
   sortOrder: number;
 };
 
-function ensureRows(): void {
-  db.insert(siteImages)
+let ensurePromise: Promise<void> | null = null;
+
+async function ensureRows(): Promise<void> {
+  if (!ensurePromise) {
+    ensurePromise = seedRows().catch((error) => {
+      ensurePromise = null;
+      throw error;
+    });
+  }
+  await ensurePromise;
+}
+
+async function seedRows(): Promise<void> {
+  await db.insert(siteImages)
     .values(
       siteImageSlots.map((slot) => ({
         key: slot.key,
@@ -27,34 +39,34 @@ function ensureRows(): void {
         sortOrder: slot.sortOrder,
       })),
     )
-    .onConflictDoNothing()
-    .run();
+    .onConflictDoNothing();
 }
 
-export function getSiteImages(): SiteImageRow[] {
-  ensureRows();
-  return db
+export async function getSiteImages(): Promise<SiteImageRow[]> {
+  await ensureRows();
+  return (await db
     .select()
     .from(siteImages)
-    .orderBy(asc(siteImages.group), asc(siteImages.sortOrder))
-    .all() as SiteImageRow[];
+    .orderBy(asc(siteImages.group), asc(siteImages.sortOrder))) as SiteImageRow[];
 }
 
-export function getSiteImagesByGroup(group: SiteImageGroup): SiteImageRow[] {
-  ensureRows();
-  return db
+export async function getSiteImagesByGroup(
+  group: SiteImageGroup,
+): Promise<SiteImageRow[]> {
+  await ensureRows();
+  return (await db
     .select()
     .from(siteImages)
     .where(eq(siteImages.group, group))
-    .orderBy(asc(siteImages.sortOrder))
-    .all() as SiteImageRow[];
+    .orderBy(asc(siteImages.sortOrder))) as SiteImageRow[];
 }
 
-export function getSiteImage(key: string): SiteImageRow | null {
-  ensureRows();
-  return (
-    (db.select().from(siteImages).where(eq(siteImages.key, key)).get() as
-      | SiteImageRow
-      | undefined) ?? null
-  );
+export async function getSiteImage(key: string): Promise<SiteImageRow | null> {
+  await ensureRows();
+  const rows = await db
+    .select()
+    .from(siteImages)
+    .where(eq(siteImages.key, key))
+    .limit(1);
+  return (rows[0] as SiteImageRow | undefined) ?? null;
 }
