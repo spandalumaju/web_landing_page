@@ -6,10 +6,14 @@ export const site = {
   status: "Negeri",
   location: "Sabrang, Ambulu, Jember",
   province: "Jawa Timur",
-  address: "Jl. Watu Ulo No. 57, Sabrang, Ambulu, Jember, Jawa Timur",
+  address:
+    "Jl. Watu Ulo No. 57, Sabrang, Ambulu, Jember, Jawa Timur 68172",
+  postalCode: "68172",
+  phone: "+62 336 881955",
+  phoneHref: "tel:+62336881955",
   email: "info@smpn2ambulu.sch.id",
   mapsUrl:
-    "https://www.google.com/maps/search/?api=1&query=SMP+Negeri+2+Ambulu+Jember",
+    "https://www.google.com/maps/place/?q=place_id:ChIJza427ZOc1i0RdaNCcLFJKQY",
   ppdbYear: "2026/2027",
   students: "1.106",
   educatorsCount: 60,

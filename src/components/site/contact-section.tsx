@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowUpRight, Clock, Mail, MapPin } from "lucide-react";
+import { ArrowUpRight, Clock, Mail, MapPin, Phone } from "lucide-react";
 import { site } from "@/lib/content";
 import { Reveal } from "@/components/motion/reveal";
 import { SectionLabel } from "@/components/site/section-label";
@@ -11,6 +11,13 @@ const contactItems = [
     content: site.address,
     href: site.mapsUrl,
     external: true,
+  },
+  {
+    icon: Phone,
+    label: "Telepon",
+    content: site.phone,
+    href: site.phoneHref,
+    external: false,
   },
   {
     icon: Mail,
@@ -96,8 +103,8 @@ export function ContactSection() {
 
             <Reveal delay={0.2}>
               <p className="mt-5 eyebrow text-[11px] leading-relaxed text-muted">
-                Email, nomor telepon, dan WhatsApp resmi akan ditampilkan
-                setelah data sekolah diverifikasi.
+                Email dan WhatsApp resmi akan ditampilkan setelah data sekolah
+                diverifikasi.
               </p>
             </Reveal>
           </div>

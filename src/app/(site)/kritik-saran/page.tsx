@@ -14,6 +14,10 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/kritik-saran",
   },
+  robots: {
+    index: false,
+    follow: true,
+  },
 };
 
 export default function FeedbackPage() {

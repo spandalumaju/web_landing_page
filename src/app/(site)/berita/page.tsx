@@ -10,10 +10,29 @@ import { ImagePlaceholder } from "@/components/site/image-placeholder";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Berita Sekolah",
+  title: "Berita & Kegiatan Sekolah",
   description:
-    "Berita, kegiatan, dan catatan pembelajaran dari SMP Negeri 2 Ambulu.",
+    "Berita, kegiatan belajar, prestasi, dan catatan sekolah dari SMP Negeri 2 Ambulu, Sabrang, Jember. Ikuti kabar terbaru dari kelas dan kegiatan murid.",
   alternates: { canonical: "/berita" },
+};
+
+const breadcrumbJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    {
+      "@type": "ListItem",
+      position: 1,
+      name: "Beranda",
+      item: "https://smpn2ambulu.sch.id",
+    },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: "Berita",
+      item: "https://smpn2ambulu.sch.id/berita",
+    },
+  ],
 };
 
 export default async function BeritaIndexPage() {
@@ -22,6 +41,12 @@ export default async function BeritaIndexPage() {
 
   return (
     <main id="top" className="section-pad bg-cream">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbJsonLd).replace(/</g, "\\u003c"),
+        }}
+      />
       <div className="container-x">
         <Link
           href="/"
@@ -38,7 +63,7 @@ export default async function BeritaIndexPage() {
         <div className="mt-10 max-w-[60ch]">
           <SectionLabel index="01">Berita</SectionLabel>
           <h1 className="mt-6 font-display text-[clamp(2.5rem,4.2vw,4rem)] font-semibold leading-[1.02] tracking-[-0.045em] text-ink">
-            Kabar dari <span className="font-medium text-matcha-deep">sekolah.</span>
+            Kabar dari <span className="font-medium text-matcha-deep">SMP Negeri 2 Ambulu.</span>
           </h1>
           <p className="mt-5 text-[14px] leading-[1.9] text-ink-soft">
             Catatan kegiatan, pembelajaran, dan keseharian di SMP Negeri 2 Ambulu.

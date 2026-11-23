@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     template: `%s — ${site.name}`,
   },
   description:
-    "Profil SMP Negeri 2 Ambulu di Sabrang, Jember: pembelajaran, guru, fasilitas, prestasi, berita, dan informasi SPMB 2026/2027.",
+    "Profil resmi SMP Negeri 2 Ambulu di Sabrang, Jember: visi sekolah, guru, pembelajaran, fasilitas, prestasi, berita, dan informasi SPMB 2026/2027.",
   applicationName: site.name,
   category: "education",
   alternates: {
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     siteName: site.name,
     title: `${site.name} — Sekolah negeri di Sabrang, Jember`,
     description:
-      "Sekolah negeri di Sabrang, Ambulu. 1.106 murid belajar bersama 60 pendidik dan 8 tenaga kependidikan.",
+      "Profil resmi SMP Negeri 2 Ambulu di Sabrang, Jember: visi sekolah, guru, pembelajaran, fasilitas, prestasi, berita, dan informasi SPMB 2026/2027.",
     images: [
       {
         url: "/logos/og-smpn2ambulu.png",
@@ -47,13 +47,20 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: `${site.name} — Sekolah negeri di Sabrang, Jember`,
     description:
-      "Sekolah negeri di Sabrang, Ambulu. 1.106 murid belajar bersama 60 pendidik dan 8 tenaga kependidikan.",
+      "Profil resmi SMP Negeri 2 Ambulu di Sabrang, Jember: visi sekolah, guru, pembelajaran, fasilitas, prestasi, berita, dan informasi SPMB 2026/2027.",
     images: ["/logos/og-smpn2ambulu.png"],
   },
   robots: {
     index: true,
     follow: true,
   },
+  ...(process.env.GOOGLE_SITE_VERIFICATION
+    ? {
+        verification: {
+          google: process.env.GOOGLE_SITE_VERIFICATION,
+        },
+      }
+    : {}),
   icons: {
     icon: "/logos/smpn2ambulu.png",
     apple: "/logos/smpn2ambulu.png",
@@ -65,25 +72,47 @@ export const viewport: Viewport = {
   colorScheme: "light",
 };
 
+const schoolId = `${siteUrl}/#school`;
+
 const jsonLd = {
   "@context": "https://schema.org",
-  "@type": "School",
-  name: site.name,
-  alternateName: site.shortName,
-  url: siteUrl,
-  logo: `${siteUrl}/logos/smpn2ambulu.png`,
-  image: `${siteUrl}/logos/og-smpn2ambulu.png`,
-  description:
-    "Sekolah menengah pertama negeri di Sabrang, Ambulu, Jember. Menumbuhkan lulusan yang berprestasi, terampil, mandiri, dan berakhlak mulia.",
-  identifier: site.npsn,
-  numberOfStudents: 1106,
-  address: {
-    "@type": "PostalAddress",
-    streetAddress: "Jl. Watu Ulo No. 57",
-    addressLocality: "Sabrang, Ambulu",
-    addressRegion: "Jawa Timur",
-    addressCountry: "ID",
-  },
+  "@graph": [
+    {
+      "@type": "School",
+      "@id": schoolId,
+      name: site.name,
+      alternateName: site.shortName,
+      url: siteUrl,
+      logo: `${siteUrl}/logos/smpn2ambulu.png`,
+      image: `${siteUrl}/logos/og-smpn2ambulu.png`,
+      description:
+        "Sekolah menengah pertama negeri di Sabrang, Ambulu, Jember. Menumbuhkan lulusan yang berprestasi, terampil, mandiri, dan berakhlak mulia.",
+      identifier: site.npsn,
+      numberOfStudents: 1106,
+      telephone: site.phone,
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: "Jl. Watu Ulo No. 57, Sabrang",
+        addressLocality: "Ambulu",
+        addressRegion: "Jawa Timur",
+        postalCode: site.postalCode,
+        addressCountry: "ID",
+      },
+      areaServed: [
+        { "@type": "AdministrativeArea", name: "Kecamatan Ambulu" },
+        { "@type": "City", name: "Jember" },
+      ],
+      hasMap: site.mapsUrl,
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${siteUrl}/#website`,
+      url: siteUrl,
+      name: site.name,
+      inLanguage: "id-ID",
+      publisher: { "@id": schoolId },
+    },
+  ],
 };
 
 const jsonLdString = JSON.stringify(jsonLd).replace(/</g, "\\u003c");

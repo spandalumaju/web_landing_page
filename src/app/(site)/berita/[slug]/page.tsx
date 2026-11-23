@@ -87,6 +87,8 @@ export default async function BeritaDetailPage({
     image: jsonLdImage,
     datePublished: (post.publishedAt ?? post.createdAt).toISOString(),
     dateModified: post.updatedAt.toISOString(),
+    inLanguage: "id-ID",
+    articleSection: post.category,
     author: {
       "@type": "Organization",
       name: site.name,
@@ -103,12 +105,44 @@ export default async function BeritaDetailPage({
     mainEntityOfPage: `https://smpn2ambulu.sch.id/berita/${post.slug}`,
   };
   const jsonLdString = JSON.stringify(jsonLd).replace(/</g, "\\u003c");
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Beranda",
+        item: "https://smpn2ambulu.sch.id",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Berita",
+        item: "https://smpn2ambulu.sch.id/berita",
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: post.title,
+        item: `https://smpn2ambulu.sch.id/berita/${post.slug}`,
+      },
+    ],
+  };
+  const breadcrumbJsonLdString = JSON.stringify(breadcrumbJsonLd).replace(
+    /</g,
+    "\\u003c",
+  );
 
   return (
     <main id="top" className="bg-cream">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: jsonLdString }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: breadcrumbJsonLdString }}
       />
       <div className="container-x section-pad">
         <Link

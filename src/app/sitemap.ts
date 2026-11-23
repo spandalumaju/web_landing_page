@@ -18,12 +18,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
     },
     {
-      url: "https://smpn2ambulu.sch.id/kritik-saran",
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.6,
-    },
-    {
       url: "https://smpn2ambulu.sch.id/berita",
       lastModified: new Date(),
       changeFrequency: "weekly",

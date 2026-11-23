@@ -83,6 +83,14 @@ export function SiteFooter() {
                 <p>{site.address}</p>
                 <p>
                   <a
+                    href={site.phoneHref}
+                    className="underline decoration-cream/20 underline-offset-4 transition-colors hover:text-cream"
+                  >
+                    {site.phone}
+                  </a>
+                </p>
+                <p>
+                  <a
                     href={`mailto:${site.email}`}
                     className="underline decoration-cream/20 underline-offset-4 transition-colors hover:text-cream"
                   >
