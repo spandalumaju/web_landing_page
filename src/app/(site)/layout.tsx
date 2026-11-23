@@ -6,6 +6,8 @@ import { PageIntro } from "@/components/site/page-intro";
 import { PointerExperience } from "@/components/motion/pointer-experience";
 import { getSiteImagesByGroup } from "@/lib/db/queries/site-images";
 
+export const dynamic = "force-dynamic";
+
 export default function SiteLayout({ children }: { children: ReactNode }) {
   const introPhotos = getSiteImagesByGroup("hero")
     .filter((image) => image.url)
