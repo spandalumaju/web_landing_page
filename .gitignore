@@ -1,0 +1,14 @@
+node_modules/
+.next/
+out/
+build/
+*.tsbuildinfo
+.env
+.env.local
+.env.*.local
+.DS_Store
+npm-debug.log*
+data/
+public/uploads/*
+!public/uploads/educators/
+!public/uploads/educators/.gitkeep
