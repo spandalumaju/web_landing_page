@@ -1,7 +1,7 @@
 export function isTurnstileConfigured(): boolean {
   return Boolean(
     process.env.TURNSTILE_SECRET_KEY &&
-      process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY,
+      process.env.TURNSTILE_SITE_KEY,
   );
 }
 
@@ -10,7 +10,7 @@ export async function verifyTurnstile(
   remoteIp: string,
 ): Promise<{ ok: boolean; error?: string }> {
   const secret = process.env.TURNSTILE_SECRET_KEY;
-  const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+  const siteKey = process.env.TURNSTILE_SITE_KEY;
 
   if (!secret || !siteKey) {
     return { ok: true };

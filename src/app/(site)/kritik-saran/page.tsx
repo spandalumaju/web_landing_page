@@ -5,6 +5,8 @@ import { SectionLabel } from "@/components/site/section-label";
 import { FeedbackForm } from "./feedback-form";
 import { submitFeedbackAction } from "./actions";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Kritik & Saran",
   description:
@@ -47,7 +49,7 @@ export default function FeedbackPage() {
                 action={submitFeedbackAction}
                 turnstileSiteKey={
                   process.env.TURNSTILE_SECRET_KEY
-                    ? process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY
+                    ? process.env.TURNSTILE_SITE_KEY
                     : undefined
                 }
               />

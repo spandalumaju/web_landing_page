@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 declare global {
   interface Window {
@@ -32,7 +32,6 @@ export function Turnstile({
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const widgetRef = useRef<string | null>(null);
-  const [token, setToken] = useState("");
 
   useEffect(() => {
     if (!siteKey) {
@@ -52,9 +51,9 @@ export function Turnstile({
         sitekey: siteKey,
         action,
         theme: "light",
-        callback: (nextToken) => setToken(nextToken),
-        "expired-callback": () => setToken(""),
-        "error-callback": () => setToken(""),
+        callback: () => undefined,
+        "expired-callback": () => undefined,
+        "error-callback": () => undefined,
       });
     };
 
@@ -93,7 +92,6 @@ export function Turnstile({
   return (
     <div className={className}>
       <div ref={containerRef} />
-      <input type="hidden" name="cf-turnstile-response" value={token} />
     </div>
   );
 }

@@ -13,3 +13,5 @@ data/
 deploy/.env.production
 
 deploy/smpn2ambulu.db
+
+deploy/*.tar.gz
