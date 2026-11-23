@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { EditorContent, useEditor, useEditorState } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import TiptapImage from "@tiptap/extension-image";
@@ -93,7 +93,10 @@ export function RichTextEditor({
   const imageInputRef = useRef<HTMLInputElement>(null);
   const imageHandler = useRef<(files: File[]) => void>(() => {});
   const onChangeRef = useRef(onChange);
-  onChangeRef.current = onChange;
+
+  useEffect(() => {
+    onChangeRef.current = onChange;
+  }, [onChange]);
 
   const editor = useEditor({
     immediatelyRender: false,
@@ -173,7 +176,7 @@ export function RichTextEditor({
     }),
   });
 
-  const insertImages = async (files: File[]) => {
+  const insertImages = useCallback(async (files: File[]) => {
     if (!editor || files.length === 0) {
       return;
     }
@@ -196,11 +199,13 @@ export function RichTextEditor({
     } finally {
       setUploading(false);
     }
-  };
+  }, [editor]);
 
-  imageHandler.current = (files) => {
-    void insertImages(files);
-  };
+  useEffect(() => {
+    imageHandler.current = (files) => {
+      void insertImages(files);
+    };
+  }, [insertImages]);
 
   useEffect(() => {
     if (!linkOpen) {
@@ -431,6 +436,7 @@ export function RichTextEditor({
         type="file"
         accept="image/jpeg,image/png,image/webp,image/avif"
         multiple
+        data-image-input="editor"
         className="sr-only"
         onChange={(event) => {
           if (event.target.files) {

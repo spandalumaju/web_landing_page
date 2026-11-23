@@ -21,6 +21,18 @@ export async function POST(request: Request) {
     return jsonError("Sesi admin tidak valid.", 401);
   }
 
+  const origin = request.headers.get("origin");
+  const host = request.headers.get("host");
+  if (origin && host) {
+    try {
+      if (new URL(origin).host !== host) {
+        return jsonError("Asal permintaan tidak diizinkan.", 403);
+      }
+    } catch {
+      return jsonError("Asal permintaan tidak valid.", 403);
+    }
+  }
+
   const contentLength = Number(request.headers.get("content-length") ?? 0);
   if (contentLength > MAX_IMAGE_BYTES + 1_000_000) {
     return jsonError("Ukuran gambar melebihi batas 8 MB.", 413);

@@ -4,11 +4,10 @@ import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { ArrowLeft, ArrowRight, Expand, X } from "lucide-react";
-import { gallery } from "@/lib/content";
 import { Reveal } from "@/components/motion/reveal";
 import { SectionLabel } from "@/components/site/section-label";
 
-export function GallerySection() {
+export function GallerySection({ images }: { images: { src: string; alt: string; caption: string }[] }) {
   const [active, setActive] = useState<number | null>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
@@ -27,9 +26,12 @@ export function GallerySection() {
       if (current === null) {
         return current;
       }
-      return (current + direction + gallery.length) % gallery.length;
+      if (images.length === 0) {
+        return current;
+      }
+      return (current + direction + images.length) % images.length;
     });
-  }, []);
+  }, [images.length]);
 
   useEffect(() => {
     if (active === null) {
@@ -88,7 +90,7 @@ export function GallerySection() {
     };
   }, [active, step]);
 
-  const current = active !== null ? gallery[active] : null;
+  const current = active !== null ? images[active] : null;
 
   return (
     <section id="galeri" className="gloss-dark section-pad text-cream">
@@ -111,9 +113,22 @@ export function GallerySection() {
           </Reveal>
         </div>
 
+        {images.length === 0 ? (
+          <Reveal delay={0.1}>
+            <div className="mt-10 rounded-[26px] border border-dashed border-cream/20 bg-white/[0.03] px-6 py-14 text-center">
+              <p className="font-display text-xl font-semibold text-cream">
+                Dokumentasi segera hadir.
+              </p>
+              <p className="mx-auto mt-2 max-w-[42ch] text-[13px] leading-relaxed text-cream/60">
+                Foto kegiatan dan fasilitas sekolah akan ditambahkan oleh
+                pengelola melalui panel admin.
+              </p>
+            </div>
+          </Reveal>
+        ) : (
         <Reveal delay={0.1}>
           <div className="no-scrollbar mt-10 flex snap-x snap-mandatory gap-5 overflow-x-auto pb-4">
-            {gallery.map((item, index) => (
+            {images.map((item, index) => (
               <button
                 key={item.src}
                 type="button"
@@ -148,6 +163,7 @@ export function GallerySection() {
             ))}
           </div>
         </Reveal>
+        )}
       </div>
 
       <AnimatePresence>
@@ -167,7 +183,7 @@ export function GallerySection() {
             <div className="flex items-center justify-between gap-4">
               <p className="eyebrow text-[11px] text-cream/70">
                 Galeri / {String(active + 1).padStart(2, "0")} dari{" "}
-                {String(gallery.length).padStart(2, "0")}
+                {String(images.length).padStart(2, "0")}
               </p>
               <button
                 ref={closeRef}

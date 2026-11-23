@@ -1,6 +1,7 @@
 import { ArrowUp, ArrowUpRight } from "lucide-react";
 import { footerLinks, site } from "@/lib/content";
 import { SchoolMark } from "@/components/site/school-mark";
+import { DispendikMark } from "@/components/site/dispendik-mark";
 
 const socials = ["Instagram", "YouTube", "Facebook", "TikTok"];
 
@@ -19,7 +20,11 @@ export function SiteFooter() {
               className="group flex items-start gap-5"
               aria-label="Kembali ke atas"
             >
-              <SchoolMark className="mt-2 h-12 w-12 shrink-0 text-matcha-light" />
+              <span className="mt-2 flex items-center gap-3">
+                <DispendikMark className="h-10 w-10 shrink-0 opacity-90" />
+                <span className="h-10 w-px bg-cream/20" aria-hidden="true" />
+                <SchoolMark className="h-12 w-12 shrink-0" />
+              </span>
               <span className="font-display text-[clamp(2.6rem,4.6vw,4.2rem)] font-semibold leading-[0.9] tracking-[-0.05em]">
                 SMPN 2
                 <br />

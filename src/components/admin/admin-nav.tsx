@@ -2,13 +2,14 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Users, Newspaper, Trophy, MessageSquareText } from "lucide-react";
+import { Image as ImageIcon, LayoutDashboard, Users, Newspaper, Trophy, MessageSquareText } from "lucide-react";
 
 const items = [
   { label: "Ringkasan", href: "/admin", icon: LayoutDashboard },
   { label: "Guru", href: "/admin/guru", icon: Users },
   { label: "Berita", href: "/admin/berita", icon: Newspaper },
   { label: "Prestasi", href: "/admin/prestasi", icon: Trophy },
+  { label: "Gambar Situs", href: "/admin/gambar", icon: ImageIcon },
   { label: "Kritik & Saran", href: "/admin/kritik-saran", icon: MessageSquareText },
 ];
 

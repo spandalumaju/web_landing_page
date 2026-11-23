@@ -18,17 +18,6 @@ export const site = {
     "Terwujudnya lulusan yang berprestasi, terampil, mandiri berdasarkan iman dan taqwa (IMTAQ).",
 };
 
-export const introPhotos = [
-  { src: "/images/hero-school.jpg", alt: "" },
-  { src: "/images/classroom.jpg", alt: "" },
-  { src: "/images/library.jpg", alt: "" },
-  { src: "/images/lab.jpg", alt: "" },
-  { src: "/images/sports.jpg", alt: "" },
-  { src: "/images/students-id.jpg", alt: "" },
-  { src: "/images/ceremony.jpg", alt: "" },
-  { src: "/images/outdoor-study.jpg", alt: "" },
-];
-
 export const navItems = [
   { label: "Profil", href: "/#profil" },
   { label: "Guru", href: "/guru" },
@@ -36,34 +25,6 @@ export const navItems = [
   { label: "Prestasi", href: "/#prestasi" },
   { label: "Berita", href: "/berita" },
   { label: "SPMB", href: "/#ppdb" },
-];
-
-export const heroAlbum = [
-  {
-    src: "/images/hero-school.jpg",
-    alt: "Gedung sekolah dengan halaman hijau",
-    caption: "Gedung sekolah",
-  },
-  {
-    src: "/images/students-id.jpg",
-    alt: "Siswa di dalam kelas",
-    caption: "Kegiatan belajar",
-  },
-  {
-    src: "/images/library.jpg",
-    alt: "Rak buku di perpustakaan",
-    caption: "Perpustakaan",
-  },
-  {
-    src: "/images/lab.jpg",
-    alt: "Peralatan laboratorium",
-    caption: "Laboratorium",
-  },
-  {
-    src: "/images/ceremony.jpg",
-    alt: "Upacara bendera di sekolah",
-    caption: "Upacara bendera",
-  },
 ];
 
 export const heroStats = [
@@ -129,7 +90,7 @@ export const academicPrograms: AcademicProgram[] = [
     title: "Pembelajaran mendalam",
     description:
       "Guru merancang pembelajaran dari pengalaman murid, lalu mengajak mereka mengamati, mencoba, dan merefleksikan hasilnya.",
-    image: "/images/classroom.jpg",
+    image: "",
     alt: "Ruang kelas dengan meja dan kursi yang tertata",
     featured: true,
   },
@@ -287,7 +248,7 @@ export const educators: Educator[] = [
     name: "Hendra Wijaya, M.Pd.",
     role: "Kepala Sekolah",
     unit: "Kepemimpinan",
-    photo: "/images/teachers/t1.jpg",
+    photo: "",
     quote: "Sekolah yang baik memberi murid ruang untuk bertanya, mencoba, dan memperbaiki diri.",
   },
   {
@@ -295,7 +256,7 @@ export const educators: Educator[] = [
     name: "Ratna Wulandari, M.Pd.",
     role: "Wakil Kepala Sekolah",
     unit: "Kurikulum",
-    photo: "/images/teachers/t3.jpg",
+    photo: "",
     quote: "Setiap keputusan pembelajaran sebaiknya bisa dijelaskan dan berpihak pada murid.",
   },
   {
@@ -303,7 +264,7 @@ export const educators: Educator[] = [
     name: "Siti Nurhaliza, S.E.",
     role: "Kepala Tata Usaha",
     unit: "Administrasi",
-    photo: "/images/teachers/t4.jpg",
+    photo: "",
     quote: "Administrasi yang rapi membuat guru punya lebih banyak waktu untuk mengajar.",
   },
   {
@@ -311,7 +272,7 @@ export const educators: Educator[] = [
     name: "Dewi Anggraini, S.Pd.",
     role: "Staff Kurikulum",
     unit: "Kurikulum",
-    photo: "/images/teachers/t6.jpg",
+    photo: "",
     quote: "Kurikulum perlu jelas, tetapi tetap memberi ruang bagi konteks setiap kelas.",
   },
   {
@@ -319,7 +280,7 @@ export const educators: Educator[] = [
     name: "Dimas Pratama, S.Pd.",
     role: "Guru Matematika",
     unit: "Dewan Guru",
-    photo: "/images/teachers/t7.jpg",
+    photo: "",
     quote: "Matematika bukan lomba menjawab cepat; yang lebih penting adalah berani menalar.",
   },
   {
@@ -327,7 +288,7 @@ export const educators: Educator[] = [
     name: "Rizky Ramadhan, S.Pd.",
     role: "Guru IPA",
     unit: "Dewan Guru",
-    photo: "/images/teachers/t9.jpg",
+    photo: "",
     quote: "Rasa ingin tahu adalah alat belajar yang paling murah dan paling kuat.",
   },
   {
@@ -335,7 +296,7 @@ export const educators: Educator[] = [
     name: "Maya Sari, S.Pd.",
     role: "Guru Bahasa Indonesia",
     unit: "Dewan Guru",
-    photo: "/images/teachers/t10.jpg",
+    photo: "",
     quote: "Membaca membuka pintu untuk berpikir lebih jauh dan menulis lebih jernih.",
   },
   {
@@ -343,7 +304,7 @@ export const educators: Educator[] = [
     name: "Arif Hidayat, S.Pd.",
     role: "Guru Bimbingan Konseling",
     unit: "Kesiswaan",
-    photo: "/images/teachers/t5.jpg",
+    photo: "",
     quote: "Setiap murid butuh setidaknya satu orang dewasa yang percaya dan mau mendengarkan.",
   },
 ];
@@ -352,13 +313,13 @@ export const orgChart = {
   head: {
     name: "Hendra Wijaya, M.Pd.",
     role: "Kepala Sekolah",
-    photo: "/images/teachers/t1.jpg",
+    photo: "",
   },
   branches: [
     {
       role: "Wakil Kepala Sekolah",
       name: "Ratna Wulandari, M.Pd.",
-      photo: "/images/teachers/t3.jpg",
+      photo: "",
       units: [
         {
           title: "Kurikulum",
@@ -385,7 +346,7 @@ export const orgChart = {
     {
       role: "Kepala Tata Usaha",
       name: "Siti Nurhaliza, S.E.",
-      photo: "/images/teachers/t4.jpg",
+      photo: "",
       units: [
         {
           title: "Administrasi Umum",
@@ -427,7 +388,7 @@ export const posts: PostItem[] = [
     title: "PETA SAMPAH: kebiasaan memilah yang dimulai dari kelas",
     excerpt:
       "Murid memetakan sumber sampah di sekolah, memilahnya, lalu mengolah sisa organik. Kebiasaan kecil ini pelan-pelan mengubah cara mereka melihat lingkungan.",
-    image: "/images/outdoor-study.jpg",
+    image: "",
     alt: "Murid belajar bersama di halaman sekolah",
     featured: true,
     body: [
@@ -443,7 +404,7 @@ export const posts: PostItem[] = [
     title: "Praktikum kompos: belajar IPA dari sisa makanan",
     excerpt:
       "Di laboratorium dan halaman sekolah, murid mengamati proses pengomposan, mencatat perubahan, dan mendiskusikan hasilnya.",
-    image: "/images/lab.jpg",
+    image: "",
     alt: "Peralatan laboratorium di atas meja",
     featured: false,
     body: [
@@ -459,7 +420,7 @@ export const posts: PostItem[] = [
     title: "Market Day: belajar menghitung, menawarkan, dan bekerja sama",
     excerpt:
       "Murid menyiapkan produk, menentukan harga, melayani pembeli, dan menghitung laba. Matematika keluar dari buku dan masuk ke pengalaman.",
-    image: "/images/students-id.jpg",
+    image: "",
     alt: "Murid mengikuti kegiatan belajar di kelas",
     featured: false,
     body: [
@@ -475,7 +436,7 @@ export const posts: PostItem[] = [
     title: "Layanan inklusi: memastikan setiap murid punya jalan belajar",
     excerpt:
       "Pendampingan diberikan sesuai kebutuhan murid, termasuk mereka yang memerlukan dukungan khusus. Tujuannya sederhana: tidak ada yang belajar sendirian.",
-    image: "/images/classroom.jpg",
+    image: "",
     alt: "Ruang kelas dengan meja dan kursi yang tertata",
     featured: false,
     body: [
@@ -491,7 +452,7 @@ export const posts: PostItem[] = [
     title: "Literasi lintas mata pelajaran: membaca bukan hanya tugas guru bahasa",
     excerpt:
       "Guru dari berbagai mapel membiasakan murid membaca, bertanya, dan menuliskan gagasan. Literasi menjadi kebiasaan sekolah, bukan satu pelajaran.",
-    image: "/images/library.jpg",
+    image: "",
     alt: "Rak buku dan ruang baca perpustakaan",
     featured: false,
     body: [
@@ -507,7 +468,7 @@ export const posts: PostItem[] = [
     title: "Juara umum Pramuka Logatram: disiplin yang dibangun perlahan",
     excerpt:
       "Latihan rutin, kerja sama regu, dan kesiapan menghadapi lomba membawa regu Pramuka SMPN 2 Ambulu meraih juara umum tingkat kabupaten.",
-    image: "/images/ceremony.jpg",
+    image: "",
     alt: "Upacara dan kegiatan resmi di sekolah",
     featured: false,
     body: [
@@ -523,7 +484,7 @@ export const posts: PostItem[] = [
     title: "Tari Mahargya Kaloka: merawat budaya lewat panggung sekolah",
     excerpt:
       "Latihan tari tidak hanya soal gerak. Murid belajar disiplin, kekompakan, dan menghargai budaya daerah sebelum tampil di festival.",
-    image: "/images/students-id.jpg",
+    image: "",
     alt: "Murid mengikuti kegiatan seni di sekolah",
     featured: false,
     body: [
@@ -531,44 +492,6 @@ export const posts: PostItem[] = [
       "Murid juga belajar kostum, tata rias, dan makna budaya di balik tarian. Mereka berlatih sabar dan saling mengingatkan.",
       "Penampilan di panggung menjadi cara merawat budaya daerah, sekaligus menunjukkan bahwa kerja keras punya bentuk yang bisa dinikmati orang lain.",
     ],
-  },
-];
-
-export const gallery = [
-  {
-    src: "/images/ceremony.jpg",
-    alt: "Upacara bendera di halaman sekolah",
-    caption: "Upacara bendera di halaman sekolah",
-  },
-  {
-    src: "/images/classroom.jpg",
-    alt: "Ruang kelas dengan meja dan kursi yang tertata",
-    caption: "Ruang kelas untuk belajar bersama",
-  },
-  {
-    src: "/images/library.jpg",
-    alt: "Rak buku di perpustakaan sekolah",
-    caption: "Perpustakaan dan ruang baca",
-  },
-  {
-    src: "/images/lab.jpg",
-    alt: "Peralatan laboratorium kaca",
-    caption: "Laboratorium IPA",
-  },
-  {
-    src: "/images/students-id.jpg",
-    alt: "Murid di dalam kelas",
-    caption: "Kegiatan belajar di kelas",
-  },
-  {
-    src: "/images/outdoor-study.jpg",
-    alt: "Murid belajar bersama di luar kelas",
-    caption: "Belajar di luar kelas",
-  },
-  {
-    src: "/images/sports.jpg",
-    alt: "Lintasan lari di lapangan sekolah",
-    caption: "Lapangan olahraga sekolah",
   },
 ];
 

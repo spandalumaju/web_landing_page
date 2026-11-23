@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import { CheckCircle2, Send } from "lucide-react";
+import { Turnstile } from "@/components/security/turnstile";
 import {
   feedbackCategories,
   type FeedbackFormState,
@@ -29,11 +30,13 @@ function SubmitButton() {
 
 export function FeedbackForm({
   action,
+  turnstileSiteKey,
 }: {
   action: (
     state: FeedbackFormState,
     formData: FormData,
   ) => Promise<FeedbackFormState>;
+  turnstileSiteKey?: string;
 }) {
   const [state, formAction] = useActionState(action, {});
 
@@ -144,6 +147,8 @@ export function FeedbackForm({
           kanal Telegram internal sekolah.
         </span>
       </label>
+
+      <Turnstile siteKey={turnstileSiteKey} action="feedback" />
 
       {state.error && (
         <p

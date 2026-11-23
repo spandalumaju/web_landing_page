@@ -10,6 +10,7 @@ type SharedProps = {
   hint?: string;
   className?: string;
   disabled?: boolean;
+  compact?: boolean;
   onChange?: (value: string | string[] | null) => void;
 };
 
@@ -101,7 +102,7 @@ export function ImageDropzone(props: SingleProps | MultipleProps) {
     }
   };
 
-  const dropzoneClass = `group relative flex min-h-28 w-full flex-col items-center justify-center gap-2 rounded-[18px] border border-dashed px-4 py-5 text-center transition-colors ${
+  const dropzoneClass = `group relative flex ${props.compact ? "min-h-[144px] gap-1.5 px-2 py-3" : "min-h-28 gap-2 px-4 py-5"} w-full flex-col items-center justify-center rounded-[18px] border border-dashed text-center transition-colors ${
     dragging
       ? "border-matcha-deep bg-matcha-soft"
       : "border-line-strong bg-white/60 hover:border-matcha-deep hover:bg-white"
@@ -155,7 +156,7 @@ export function ImageDropzone(props: SingleProps | MultipleProps) {
               className="absolute inset-x-3 bottom-3 inline-flex items-center justify-center gap-2 rounded-full bg-ink/80 px-3 py-2 text-[11px] font-medium text-cream backdrop-blur-sm transition-colors hover:bg-ink"
             >
               <ImagePlus size={13} aria-hidden="true" />
-              Ganti gambar
+              {props.compact ? "Ganti" : "Ganti gambar"}
             </button>
           </div>
         ) : (
@@ -178,10 +179,20 @@ export function ImageDropzone(props: SingleProps | MultipleProps) {
             <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-matcha-soft text-matcha-deep">
               <UploadCloud size={18} aria-hidden="true" />
             </span>
-            <span className="text-[12px] font-medium text-ink">
-              Tarik gambar ke sini atau klik untuk memilih
-            </span>
-            <span className="text-[11px] text-muted">JPG, PNG, WebP, AVIF · maks. 8 MB</span>
+            {props.compact ? (
+              <span className="text-[11px] font-medium leading-tight text-ink">
+                Unggah foto
+              </span>
+            ) : (
+              <>
+                <span className="text-[12px] font-medium text-ink">
+                  Tarik gambar ke sini atau klik untuk memilih
+                </span>
+                <span className="text-[11px] text-muted">
+                  JPG, PNG, WebP, AVIF · maks. 8 MB
+                </span>
+              </>
+            )}
           </button>
         )}
 
@@ -206,6 +217,7 @@ export function ImageDropzone(props: SingleProps | MultipleProps) {
           id={inputId}
           type="file"
           accept="image/jpeg,image/png,image/webp,image/avif"
+          data-image-input={props.name}
           className="sr-only"
           onChange={(event) => {
             if (event.target.files) {
@@ -301,6 +313,7 @@ export function ImageDropzone(props: SingleProps | MultipleProps) {
         type="file"
         accept="image/jpeg,image/png,image/webp,image/avif"
         multiple
+        data-image-input={props.name}
         className="sr-only"
         onChange={(event) => {
           if (event.target.files) {

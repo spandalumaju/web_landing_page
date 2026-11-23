@@ -1,11 +1,20 @@
 import { ArrowDown } from "lucide-react";
 import { heroStats, site } from "@/lib/content";
+import { getSiteImagesByGroup } from "@/lib/db/queries/site-images";
 import { ButtonLink } from "@/components/site/button-link";
 import { HeroAlbum } from "@/components/site/hero-album";
 import { HeroHeadline } from "@/components/site/hero-headline";
 import { Reveal } from "@/components/motion/reveal";
 
 export function Hero() {
+  const heroPhotos = getSiteImagesByGroup("hero")
+    .filter((image) => image.url)
+    .map((image) => ({
+      src: image.url,
+      alt: image.alt,
+      caption: image.label.replace(/^Foto utama — /, ""),
+    }));
+
   return (
     <section id="top" aria-labelledby="hero-title" className="relative overflow-hidden">
       <div
@@ -90,7 +99,7 @@ export function Hero() {
             />
 
             <Reveal variant="scale" delay={0.12}>
-              <HeroAlbum />
+              <HeroAlbum photos={heroPhotos} />
             </Reveal>
 
           </div>

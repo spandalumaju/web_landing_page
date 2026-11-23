@@ -10,6 +10,7 @@ import {
 } from "@/lib/db/queries/content";
 import { sanitizeArticleHtml } from "@/lib/sanitize";
 import { site } from "@/lib/content";
+import { ImagePlaceholder } from "@/components/site/image-placeholder";
 
 export const dynamic = "force-dynamic";
 
@@ -34,10 +35,13 @@ export async function generateMetadata({
   if (!post) {
     return { title: "Berita tidak ditemukan" };
   }
-  const images = [
-    post.cover,
-    ...parsePostImages(post.images),
-  ].filter((image): image is string => Boolean(image));
+  const images = Array.from(
+    new Set(
+      [post.cover, ...parsePostImages(post.images)].filter(
+        (image): image is string => Boolean(image),
+      ),
+    ),
+  );
 
   return {
     title: post.title,
@@ -67,11 +71,14 @@ export default async function BeritaDetailPage({
     .filter((item) => item.slug !== post.slug)
     .slice(0, 2);
   const html = sanitizeArticleHtml(post.contentHtml || `<p>${post.excerpt}</p>`);
-  const gallery = parsePostImages(post.images).filter((image) => image !== post.cover);
-  const cover = post.cover || gallery[0] || "/images/classroom.jpg";
-  const jsonLdImage = [cover, ...gallery].map((image) =>
-    new URL(image, "https://smpn2ambulu.sch.id").toString(),
-  );
+  const allImages = parsePostImages(post.images);
+  const cover = post.cover || allImages[0] || "";
+  const gallery = allImages.filter((image) => image !== cover);
+  const jsonLdImage = Array.from(new Set([cover, ...gallery]))
+    .filter(Boolean)
+    .map((image) =>
+      new URL(image, "https://smpn2ambulu.sch.id").toString(),
+    );
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "NewsArticle",
@@ -130,14 +137,18 @@ export default async function BeritaDetailPage({
           </p>
 
           <div className="relative mt-8 aspect-[16/10] overflow-hidden rounded-[24px] bg-matcha-mist shadow-[0_24px_60px_rgba(24,56,35,0.14)] ring-1 ring-white/60">
-            <Image
-              src={cover}
-              alt={post.title}
-              fill
-              sizes="(max-width: 1024px) 100vw, 896px"
-              className="image-soft object-cover"
-              priority
-            />
+            {cover ? (
+              <Image
+                src={cover}
+                alt={post.title}
+                fill
+                sizes="(max-width: 1024px) 100vw, 896px"
+                className="image-soft object-cover"
+                priority
+              />
+            ) : (
+              <ImagePlaceholder label="Foto utama berita belum diunggah" />
+            )}
           </div>
 
           <div

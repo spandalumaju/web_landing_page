@@ -1,23 +1,8 @@
-import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
 import { ParallaxImage } from "@/components/motion/parallax-image";
 import { Reveal } from "@/components/motion/reveal";
 import { SectionLabel } from "@/components/site/section-label";
-
-const smallFacilities = [
-  {
-    title: "Laboratorium IPA",
-    caption: "Belajar dengan tangan",
-    image: "/images/lab.jpg",
-    alt: "Peralatan laboratorium kaca",
-  },
-  {
-    title: "Lapangan",
-    caption: "Gerak dan kebersamaan",
-    image: "/images/sports.jpg",
-    alt: "Lintasan lari di lapangan",
-  },
-];
+import { getSiteImagesByGroup } from "@/lib/db/queries/site-images";
 
 const facilityList = [
   "Ruang kelas",
@@ -35,6 +20,27 @@ const facilityList = [
 ];
 
 export function FacilitiesSection() {
+  const facilityImages = getSiteImagesByGroup("facilities");
+  const library = facilityImages.find((image) => image.key === "facility-library");
+  const smallFacilities = [
+    {
+      title: "Laboratorium IPA",
+      caption: "Belajar dengan tangan",
+      image: facilityImages.find((image) => image.key === "facility-lab")?.url ?? "",
+      alt:
+        facilityImages.find((image) => image.key === "facility-lab")?.alt ||
+        "Laboratorium IPA sekolah",
+    },
+    {
+      title: "Lapangan",
+      caption: "Gerak dan kebersamaan",
+      image: facilityImages.find((image) => image.key === "facility-sports")?.url ?? "",
+      alt:
+        facilityImages.find((image) => image.key === "facility-sports")?.alt ||
+        "Lapangan olahraga sekolah",
+    },
+  ];
+
   return (
     <section id="fasilitas" className="section-pad bg-matcha-mist">
       <div className="container-x">
@@ -73,8 +79,8 @@ export function FacilitiesSection() {
           <Reveal variant="scale" className="md:col-span-7">
             <figure data-tilt className="group relative overflow-hidden rounded-[28px] bg-white shadow-[0_24px_60px_rgba(24,56,35,0.14)] ring-1 ring-white/60">
               <ParallaxImage
-                src="/images/library.jpg"
-                alt="Rak buku di perpustakaan"
+                src={library?.url ?? ""}
+                alt={library?.alt || "Perpustakaan sekolah"}
                 sizes="(max-width: 768px) 100vw, 58vw"
                 className="aspect-[4/3]"
                 distance={20}
@@ -103,15 +109,13 @@ export function FacilitiesSection() {
             {smallFacilities.map((facility, index) => (
               <Reveal key={facility.title} variant="scale" delay={0.06 + index * 0.05}>
                 <figure data-tilt className="group relative overflow-hidden rounded-[24px] bg-white shadow-[0_18px_45px_rgba(24,56,35,0.1)] ring-1 ring-white/70">
-                  <div className="relative aspect-[16/10] overflow-hidden">
-                    <Image
-                      src={facility.image}
-                      alt={facility.alt}
-                      fill
-                      sizes="(max-width: 768px) 100vw, 38vw"
-                      className="image-soft object-cover transition-transform duration-[1100ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.045]"
-                    />
-                  </div>
+                  <ParallaxImage
+                    src={facility.image}
+                    alt={facility.alt}
+                    sizes="(max-width: 768px) 100vw, 38vw"
+                    className="aspect-[16/10]"
+                    distance={14}
+                  />
                   <div
                     className="absolute inset-0 bg-gradient-to-t from-ink/55 via-transparent to-transparent"
                     aria-hidden="true"

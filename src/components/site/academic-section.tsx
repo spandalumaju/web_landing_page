@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { ImagePlaceholder } from "@/components/site/image-placeholder";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import {
   academicPrograms,
@@ -10,7 +11,7 @@ import { SectionLabel } from "@/components/site/section-label";
 
 export function AcademicSection() {
   const [featured, ...rest] = academicPrograms;
-  const featuredImage = featured?.image ?? "/images/classroom.jpg";
+  const featuredImage = featured?.image ?? "";
   const featuredAlt =
     featured?.alt ?? "Ruang kelas dengan meja dan kursi yang tertata";
 
@@ -46,13 +47,21 @@ export function AcademicSection() {
               href="#akademik"
               data-tilt data-cursor="Program" className="gloss-sheen group relative flex min-h-[360px] flex-col justify-end overflow-hidden rounded-[28px] bg-[linear-gradient(135deg,#163722,#0b120d)] p-6 text-cream shadow-[0_28px_70px_rgba(24,56,35,0.2)] ring-1 ring-white/10 sm:min-h-[440px] sm:p-8"
             >
-              <Image
-                src={featuredImage}
-                alt={featuredAlt}
-                fill
-                sizes="(max-width: 768px) 100vw, 50vw"
-                className="image-soft object-cover opacity-90 transition-transform duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]"
-              />
+              {featuredImage ? (
+                <Image
+                  src={featuredImage}
+                  alt={featuredAlt}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  className="image-soft object-cover opacity-90 transition-transform duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]"
+                />
+              ) : (
+                <ImagePlaceholder
+                  dark
+                  label="Foto program pembelajaran"
+                  className="absolute inset-0"
+                />
+              )}
               <div
                 className="absolute inset-0 bg-gradient-to-t from-ink via-ink/20 to-transparent"
                 aria-hidden="true"

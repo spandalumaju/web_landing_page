@@ -104,7 +104,8 @@ export function EducatorForm({
           label="Foto"
           value={educator?.photo ?? null}
           aspect="aspect-[3/4]"
-          className="w-[108px] shrink-0"
+          className="w-[116px] shrink-0"
+          compact
           hint=""
         />
         <div className="min-w-0 flex-1 space-y-3">

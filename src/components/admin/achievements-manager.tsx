@@ -65,9 +65,6 @@ export function AchievementsManager({ rows }: { rows: AchievementRow[] }) {
   const selected = selectedId
     ? rows.find((row) => row.id === selectedId) ?? null
     : null;
-  const selectedUpdatedAt = selected?.updatedAt
-    ? new Date(selected.updatedAt).getTime()
-    : 0;
 
   const openCreate = () => {
     setSelectedId(null);
@@ -266,7 +263,7 @@ export function AchievementsManager({ rows }: { rows: AchievementRow[] }) {
           } xl:static xl:z-auto xl:block xl:h-fit xl:overflow-visible xl:rounded-[20px] xl:border xl:border-line xl:bg-cream xl:p-5 xl:shadow-none`}
         >
           <AchievementForm
-            key={`${selected?.id ?? "new"}-${formVersion}-${selectedUpdatedAt}`}
+            key={`${selected?.id ?? "new"}-${formVersion}`}
             action={action}
             achievement={selected ?? undefined}
             onSaved={handleSaved}

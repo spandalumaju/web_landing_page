@@ -4,8 +4,13 @@ import { SiteHeader } from "@/components/site/site-header";
 import { ScrollProgress } from "@/components/motion/scroll-progress";
 import { PageIntro } from "@/components/site/page-intro";
 import { PointerExperience } from "@/components/motion/pointer-experience";
+import { getSiteImagesByGroup } from "@/lib/db/queries/site-images";
 
 export default function SiteLayout({ children }: { children: ReactNode }) {
+  const introPhotos = getSiteImagesByGroup("hero")
+    .filter((image) => image.url)
+    .slice(0, 5)
+    .map((image) => ({ src: image.url, alt: image.alt }));
   return (
     <>
       <a
@@ -14,7 +19,7 @@ export default function SiteLayout({ children }: { children: ReactNode }) {
       >
         Lewati ke konten
       </a>
-      <PageIntro />
+      <PageIntro photos={introPhotos} />
       <PointerExperience />
       <ScrollProgress />
       <SiteHeader />

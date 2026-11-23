@@ -35,7 +35,14 @@ export default function AdminLoginPage() {
             ditautkan dari situs publik.
           </p>
 
-          <LoginForm action={loginAction} />
+          <LoginForm
+            action={loginAction}
+            turnstileSiteKey={
+              process.env.TURNSTILE_SECRET_KEY
+                ? process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY
+                : undefined
+            }
+          />
         </div>
 
         <div className="mt-6 flex items-center justify-between gap-4">

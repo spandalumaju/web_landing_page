@@ -9,6 +9,7 @@ build/
 .DS_Store
 npm-debug.log*
 data/
-public/uploads/*
-!public/uploads/educators/
-!public/uploads/educators/.gitkeep
+
+deploy/.env.production
+
+deploy/smpn2ambulu.db

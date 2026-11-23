@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     title: "Tenaga Pendidik & Kependidikan — SMP Negeri 2 Ambulu",
     description:
       "Struktur organisasi, tenaga pendidik, dan tenaga kependidikan SMP Negeri 2 Ambulu.",
-    images: ["/images/students-id.jpg"],
+    images: ["/logos/og-smpn2ambulu.png"],
   },
 };
 
@@ -155,13 +155,27 @@ export default function GuruPage() {
                       }`}
                     >
                       <div className="relative aspect-[3/4]">
-                        <Image
-                          src={educator.photo}
-                          alt={`Foto ${educator.name}`}
-                          fill
-                          sizes="(max-width: 1024px) 40vw, 20vw"
-                          className="grayscale object-cover"
-                        />
+                        {educator.photo ? (
+                          <Image
+                            src={educator.photo}
+                            alt={`Foto ${educator.name}`}
+                            fill
+                            sizes="(max-width: 1024px) 40vw, 20vw"
+                            className="grayscale object-cover"
+                          />
+                        ) : (
+                          <div className="flex h-full w-full items-center justify-center bg-[linear-gradient(145deg,#dcefd0,#f7fbf2)]">
+                            <span className="font-display text-3xl font-semibold tracking-[-0.05em] text-matcha-deep/70">
+                              {educator.name
+                                .split(" ")
+                                .filter(Boolean)
+                                .slice(0, 2)
+                                .map((part) => part[0])
+                                .join("")
+                                .toUpperCase()}
+                            </span>
+                          </div>
+                        )}
                         <div
                           className="absolute inset-0 bg-gradient-to-t from-ink/55 via-transparent to-transparent"
                           aria-hidden="true"

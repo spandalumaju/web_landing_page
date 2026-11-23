@@ -14,12 +14,20 @@ import {
   getPublishedAchievements,
   getPublishedPosts,
 } from "@/lib/db/queries/content";
+import { getSiteImagesByGroup } from "@/lib/db/queries/site-images";
 
 export const dynamic = "force-dynamic";
 
 export default function HomePage() {
   const news = getPublishedPosts();
   const achievements = getPublishedAchievements();
+  const gallery = getSiteImagesByGroup("gallery")
+    .filter((image) => image.url)
+    .map((image) => ({
+      src: image.url,
+      alt: image.alt,
+      caption: image.label,
+    }));
 
   return (
     <>
@@ -32,7 +40,7 @@ export default function HomePage() {
       <AchievementsSection achievements={achievements} />
       <TeachersSection />
       <NewsSection posts={news} />
-      <GallerySection />
+      <GallerySection images={gallery} />
       <PpdbSection />
       <ContactSection />
     </>

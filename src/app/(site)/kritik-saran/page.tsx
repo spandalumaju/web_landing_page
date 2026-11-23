@@ -43,7 +43,14 @@ export default function FeedbackPage() {
             </p>
 
             <div className="gloss-card mt-8 rounded-[26px] p-5 sm:p-7">
-              <FeedbackForm action={submitFeedbackAction} />
+              <FeedbackForm
+                action={submitFeedbackAction}
+                turnstileSiteKey={
+                  process.env.TURNSTILE_SECRET_KEY
+                    ? process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY
+                    : undefined
+                }
+              />
             </div>
           </div>
 

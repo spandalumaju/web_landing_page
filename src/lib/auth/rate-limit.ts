@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { and, eq, gt } from "drizzle-orm";
+import { and, eq, gt, lt } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { loginAttempts } from "@/lib/db/schema";
 import { LOGIN_MAX_ATTEMPTS, LOGIN_WINDOW_MS } from "@/lib/auth/constants";
@@ -8,6 +8,10 @@ export function loginIdentifier(email: string, ip: string): string {
   return createHash("sha256")
     .update(`${email.trim().toLowerCase()}|${ip}`)
     .digest("hex");
+}
+
+export function loginIpIdentifier(ip: string): string {
+  return createHash("sha256").update(`ip|${ip}`).digest("hex");
 }
 
 export function isLoginRateLimited(identifier: string): boolean {
@@ -27,6 +31,15 @@ export function isLoginRateLimited(identifier: string): boolean {
 }
 
 export function recordLoginFailure(identifier: string): void {
+  const cutoff = new Date(Date.now() - 24 * 60 * 60 * 1000);
+  db.delete(loginAttempts)
+    .where(
+      and(
+        eq(loginAttempts.identifier, identifier),
+        lt(loginAttempts.createdAt, cutoff),
+      ),
+    )
+    .run();
   db.insert(loginAttempts)
     .values({
       id: crypto.randomUUID(),

@@ -57,7 +57,7 @@ export function getPublishedPosts(): PostItem[] {
       date: formatDate(post.publishedAt ?? post.createdAt),
       title: post.title,
       excerpt: post.excerpt,
-      image: post.cover || parsePostImages(post.images)[0] || "/images/classroom.jpg",
+      image: post.cover || parsePostImages(post.images)[0] || "",
       alt: post.title,
       featured: false,
     }));

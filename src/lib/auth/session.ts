@@ -36,7 +36,9 @@ export async function createSession(userId: string): Promise<void> {
   cookieStore.set(SESSION_COOKIE, token, {
     httpOnly: true,
     sameSite: "lax",
-    secure: requestHeaders.get("x-forwarded-proto") === "https",
+    secure:
+      process.env.NODE_ENV === "production" ||
+      requestHeaders.get("x-forwarded-proto") === "https",
     path: "/",
     expires: expiresAt,
   });

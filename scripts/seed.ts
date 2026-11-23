@@ -109,7 +109,7 @@ if (newPosts.length > 0) {
           `<p>${post.excerpt}</p>`,
         category: post.category,
         status: "published",
-        cover: post.image,
+        cover: post.image.startsWith("/media/") ? post.image : null,
         publishedAt: parseContentDate(post.date, index),
       })),
     )

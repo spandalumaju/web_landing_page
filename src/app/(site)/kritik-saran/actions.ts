@@ -8,6 +8,7 @@ import { db } from "@/lib/db";
 import { feedback, feedbackRateLimits } from "@/lib/db/schema";
 import { getClientIp } from "@/lib/auth/session";
 import { sendFeedbackToTelegram } from "@/lib/telegram";
+import { verifyTurnstile } from "@/lib/security/turnstile";
 import {
   feedbackSchema,
   type FeedbackFormState,
@@ -41,6 +42,13 @@ export async function submitFeedbackAction(
   }
 
   const ip = await getClientIp();
+  const turnstile = await verifyTurnstile(
+    String(formData.get("cf-turnstile-response") ?? ""),
+    ip,
+  );
+  if (!turnstile.ok) {
+    return { error: turnstile.error || "Verifikasi keamanan gagal." };
+  }
   const ipHash = createHash("sha256").update(ip).digest("hex");
   const cutoff = new Date(Date.now() - RATE_WINDOW_MS);
 

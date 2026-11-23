@@ -49,6 +49,22 @@ export const loginAttempts = sqliteTable(
   (table) => [index("login_attempts_identifier_idx").on(table.identifier, table.createdAt)],
 );
 
+export const siteImages = sqliteTable(
+  "site_images",
+  {
+    key: text("key").primaryKey(),
+    group: text("group").notNull(),
+    label: text("label").notNull(),
+    alt: text("alt").notNull().default(""),
+    url: text("url").notNull().default(""),
+    sortOrder: integer("sort_order").notNull().default(0),
+    updatedAt: integer("updated_at", { mode: "timestamp_ms" })
+      .notNull()
+      .$defaultFn(() => new Date()),
+  },
+  (table) => [index("site_images_group_idx").on(table.group, table.sortOrder)],
+);
+
 export const educators = sqliteTable(
   "educators",
   {
@@ -56,7 +72,7 @@ export const educators = sqliteTable(
     name: text("name").notNull(),
     role: text("role").notNull(),
     unit: text("unit").notNull().default("Dewan Guru"),
-    photo: text("photo").notNull().default("/images/teachers/t1.jpg"),
+    photo: text("photo").notNull().default(""),
     quote: text("quote").notNull().default(""),
     level: integer("level").notNull().default(3),
     sortOrder: integer("sort_order").notNull().default(0),

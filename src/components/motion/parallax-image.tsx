@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useRef } from "react";
 import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
+import { ImagePlaceholder } from "@/components/site/image-placeholder";
 
 export function ParallaxImage({
   src,
@@ -28,6 +29,14 @@ export function ParallaxImage({
     offset: ["start end", "end start"],
   });
   const y = useTransform(scrollYProgress, [0, 1], [distance, -distance]);
+
+  if (!src) {
+    return (
+      <div ref={ref} className={`relative overflow-hidden ${className}`}>
+        <ImagePlaceholder label={alt || "Dokumentasi sekolah"} />
+      </div>
+    );
+  }
 
   return (
     <div ref={ref} className={`relative overflow-hidden ${className}`}>

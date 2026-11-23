@@ -1,0 +1,11 @@
+.git
+.next
+node_modules
+data
+*.log
+.env
+.env.*
+!.env.example
+public/uploads
+Dockerfile
+.dockerignore

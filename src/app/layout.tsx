@@ -36,10 +36,10 @@ export const metadata: Metadata = {
       "Sekolah negeri di Sabrang, Ambulu. 1.106 murid belajar bersama 60 pendidik dan 8 tenaga kependidikan.",
     images: [
       {
-        url: "/images/hero-school.jpg",
-        width: 1800,
-        height: 1179,
-        alt: "Gedung dan halaman SMP Negeri 2 Ambulu",
+        url: "/logos/og-smpn2ambulu.png",
+        width: 1200,
+        height: 630,
+        alt: "SMP Negeri 2 Ambulu",
       },
     ],
   },
@@ -48,14 +48,15 @@ export const metadata: Metadata = {
     title: `${site.name} — Sekolah negeri di Sabrang, Jember`,
     description:
       "Sekolah negeri di Sabrang, Ambulu. 1.106 murid belajar bersama 60 pendidik dan 8 tenaga kependidikan.",
-    images: ["/images/hero-school.jpg"],
+    images: ["/logos/og-smpn2ambulu.png"],
   },
   robots: {
     index: true,
     follow: true,
   },
   icons: {
-    icon: "/icon.svg",
+    icon: "/logos/smpn2ambulu.png",
+    apple: "/logos/smpn2ambulu.png",
   },
 };
 
@@ -70,8 +71,8 @@ const jsonLd = {
   name: site.name,
   alternateName: site.shortName,
   url: siteUrl,
-  logo: `${siteUrl}/icon.svg`,
-  image: `${siteUrl}/images/hero-school.jpg`,
+  logo: `${siteUrl}/logos/smpn2ambulu.png`,
+  image: `${siteUrl}/logos/og-smpn2ambulu.png`,
   description:
     "Sekolah menengah pertama negeri di Sabrang, Ambulu, Jember. Menumbuhkan lulusan yang berprestasi, terampil, mandiri, dan berakhlak mulia.",
   identifier: site.npsn,

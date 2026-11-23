@@ -64,9 +64,6 @@ export function EducatorsManager({ rows }: { rows: EducatorRow[] }) {
   const selected = selectedId
     ? rows.find((row) => row.id === selectedId) ?? null
     : null;
-  const selectedUpdatedAt = selected?.updatedAt
-    ? new Date(selected.updatedAt).getTime()
-    : 0;
 
   const openCreate = () => {
     setSelectedId(null);
@@ -99,8 +96,8 @@ export function EducatorsManager({ rows }: { rows: EducatorRow[] }) {
             Pendidik &amp; staf
           </h1>
           <p className="mt-2 max-w-[54ch] text-[13px] leading-relaxed text-muted">
-            {rows.length} kartu tersimpan · {rows.filter((row) => row.published).length}{" "}
-            tampil di situs. Tambah atau edit tanpa meninggalkan halaman ini.
+            {rows.length} kartu · {rows.filter((row) => row.published).length}{" "}
+            tampil. Kelola kartu langsung di halaman ini.
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
@@ -200,13 +197,27 @@ export function EducatorsManager({ rows }: { rows: EducatorRow[] }) {
                     key={educator.id}
                     className="flex items-center gap-3 p-3 transition-colors hover:bg-white/60 sm:gap-4 sm:px-4"
                   >
-                    <div className="h-14 w-12 shrink-0 overflow-hidden rounded-xl bg-matcha-soft">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={educator.photo}
-                        alt=""
-                        className="h-full w-full object-cover"
-                      />
+                    <div className="flex h-14 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-matcha-soft">
+                      {educator.photo ? (
+                        <>
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={educator.photo}
+                            alt=""
+                            className="h-full w-full object-cover"
+                          />
+                        </>
+                      ) : (
+                        <span className="font-display text-[11px] font-semibold text-matcha-deep/70">
+                          {educator.name
+                            .split(" ")
+                            .filter(Boolean)
+                            .slice(0, 2)
+                            .map((part) => part[0])
+                            .join("")
+                            .toUpperCase()}
+                        </span>
+                      )}
                     </div>
                     <div className="min-w-0 flex-1">
                       <div className="flex flex-wrap items-center gap-2">
@@ -273,7 +284,7 @@ export function EducatorsManager({ rows }: { rows: EducatorRow[] }) {
           } xl:static xl:z-auto xl:block xl:h-fit xl:overflow-visible xl:rounded-[20px] xl:border xl:border-line xl:bg-cream xl:p-5 xl:shadow-none`}
         >
           <EducatorForm
-            key={`${selected?.id ?? "new"}-${formVersion}-${selectedUpdatedAt}`}
+            key={`${selected?.id ?? "new"}-${formVersion}`}
             action={action}
             educator={selected ?? undefined}
             onSaved={handleSaved}

@@ -1,7 +1,6 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 import { eq } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { feedback } from "@/lib/db/schema";
@@ -28,7 +27,6 @@ export async function updateFeedbackStatusAction(
 
   revalidatePath("/admin/kritik-saran");
   revalidatePath("/admin");
-  redirect("/admin/kritik-saran");
 }
 
 export async function resendFeedbackAction(id: string): Promise<void> {
@@ -57,13 +55,20 @@ export async function resendFeedbackAction(id: string): Promise<void> {
 
   revalidatePath("/admin/kritik-saran");
   revalidatePath("/admin");
-  redirect("/admin/kritik-saran");
 }
 
-export async function deleteFeedbackAction(id: string): Promise<void> {
+export async function deleteFeedbackAction(id: string): Promise<{
+  success?: boolean;
+  error?: string;
+}> {
   await assertAdmin();
+  const existing = db.select().from(feedback).where(eq(feedback.id, id)).get();
+  if (!existing) {
+    return { error: "Pesan sudah tidak ada." };
+  }
+
   db.delete(feedback).where(eq(feedback.id, id)).run();
   revalidatePath("/admin/kritik-saran");
   revalidatePath("/admin");
-  redirect("/admin/kritik-saran");
+  return { success: true };
 }

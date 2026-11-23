@@ -3,12 +3,12 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useReducedMotion } from "motion/react";
-import { introPhotos } from "@/lib/content";
+
 import { SchoolMark } from "@/components/site/school-mark";
 
 type Phase = "loading" | "revealing" | "done";
 
-export function PageIntro() {
+export function PageIntro({ photos }: { photos: { src: string; alt: string }[] }) {
   const reduce = useReducedMotion();
   const [phase, setPhase] = useState<Phase>("loading");
 
@@ -49,20 +49,22 @@ export function PageIntro() {
 
   return (
     <div id="page-intro" data-phase={phase} aria-hidden="true">
-      <div className="intro-collage">
-        {introPhotos.map((photo, index) => (
-          <div key={photo.src} className="intro-photo">
-            <Image
-              src={photo.src}
-              alt={photo.alt}
-              fill
-              sizes="(max-width: 768px) 50vw, 25vw"
-              priority={index < 2}
-              className="object-cover"
-            />
-          </div>
-        ))}
-      </div>
+      {photos.length > 0 && (
+        <div className="intro-collage">
+          {photos.map((photo, index) => (
+            <div key={photo.src} className="intro-photo">
+              <Image
+                src={photo.src}
+                alt={photo.alt}
+                fill
+                sizes="(max-width: 768px) 50vw, 25vw"
+                priority={index < 2}
+                className="object-cover"
+              />
+            </div>
+          ))}
+        </div>
+      )}
       <div className="intro-wash" />
       <div className="intro-content">
         <div className="intro-mark">

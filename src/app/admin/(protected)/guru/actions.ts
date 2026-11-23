@@ -27,7 +27,7 @@ function readForm(formData: FormData) {
 
 function resolvePhoto(value: string | undefined): string | null {
   if (!value) {
-    return "/images/teachers/t1.jpg";
+    return "";
   }
   return isSafeMediaUrl(value) ? value : null;
 }

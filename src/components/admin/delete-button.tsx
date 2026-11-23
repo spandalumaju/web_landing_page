@@ -46,14 +46,18 @@ export function DeleteButton({
 
   const confirm = () => {
     startTransition(async () => {
-      const result = await onConfirm();
-      if (result.error) {
-        toast.push(result.error, "error");
-        return;
+      try {
+        const result = await onConfirm();
+        if (result.error) {
+          toast.push(result.error, "error");
+          return;
+        }
+        setOpen(false);
+        toast.push(successMessage);
+        router.refresh();
+      } catch {
+        toast.push("Tindakan gagal. Periksa koneksi lalu coba lagi.", "error");
       }
-      setOpen(false);
-      toast.push(successMessage);
-      router.refresh();
     });
   };
 

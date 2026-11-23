@@ -8,6 +8,7 @@ import { Menu, X } from "lucide-react";
 import { navItems, site } from "@/lib/content";
 import { ButtonLink } from "@/components/site/button-link";
 import { SchoolMark } from "@/components/site/school-mark";
+import { DispendikMark } from "@/components/site/dispendik-mark";
 
 export function SiteHeader() {
   const [scrolled, setScrolled] = useState(false);
@@ -52,9 +53,13 @@ export function SiteHeader() {
         <Link
           href="/#top"
           className="group flex items-center gap-3.5"
-          aria-label="SMP Negeri 2 Ambulu — kembali ke atas"
+          aria-label="Dinas Pendidikan Kabupaten Jember dan SMP Negeri 2 Ambulu — kembali ke atas"
         >
-          <SchoolMark className="h-10 w-10 text-matcha-deep transition-transform duration-500 group-hover:rotate-6 md:h-11 md:w-11" />
+          <span className="hidden items-center gap-2 sm:flex">
+            <DispendikMark className="h-8 w-8 opacity-80 md:h-9 md:w-9" />
+            <span className="h-7 w-px bg-line" aria-hidden="true" />
+          </span>
+          <SchoolMark className="h-10 w-10 transition-transform duration-500 group-hover:rotate-6 md:h-11 md:w-11" />
           <span className="flex flex-col gap-1">
             <span className="font-display text-[24px] font-semibold leading-none tracking-[-0.03em] text-ink md:text-[27px]">
               SMPN 2

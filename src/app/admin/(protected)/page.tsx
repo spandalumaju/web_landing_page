@@ -70,13 +70,21 @@ export default async function AdminDashboardPage() {
             database dan halaman publik yang terhubung.
           </p>
         </div>
-        <Link
-          href="/admin/guru/baru"
-          className="inline-flex shrink-0 items-center gap-2 rounded-full gloss-button px-5 py-3 font-display text-[11px] font-semibold tracking-[-0.01em] text-cream transition-colors "
-        >
-          Tambah pendidik
-          <ArrowUpRight size={13} aria-hidden="true" />
-        </Link>
+        <div className="flex flex-wrap gap-2">
+          <Link
+            href="/admin/berita/baru"
+            className="inline-flex shrink-0 items-center gap-2 rounded-full gloss-button px-5 py-3 font-display text-[11px] font-semibold tracking-[-0.01em] text-cream transition-colors "
+          >
+            Tulis berita
+            <ArrowUpRight size={13} aria-hidden="true" />
+          </Link>
+          <Link
+            href="/admin/guru"
+            className="inline-flex shrink-0 items-center gap-2 rounded-full border border-line-strong bg-cream px-5 py-3 font-display text-[11px] font-semibold tracking-[-0.01em] text-ink-soft transition-colors hover:border-matcha-deep hover:text-matcha-deep"
+          >
+            Kelola pendidik
+          </Link>
+        </div>
       </div>
 
       <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -86,31 +94,36 @@ export default async function AdminDashboardPage() {
             value: counts.educators,
             hint: `${counts.publishedEducators} kartu tampil di situs`,
             icon: Users,
+            href: "/admin/guru",
           },
           {
             label: "Berita",
             value: counts.posts,
             hint: "Draft & published",
             icon: Newspaper,
+            href: "/admin/berita",
           },
           {
             label: "Prestasi",
             value: counts.achievements,
             hint: "Arsip prestasi",
             icon: Trophy,
+            href: "/admin/prestasi",
           },
           {
             label: "Kritik & saran",
             value: counts.feedback,
             hint: `${counts.newFeedback} belum dibaca`,
             icon: MessageSquareText,
+            href: "/admin/kritik-saran",
           },
         ].map((card) => {
           const Icon = card.icon;
           return (
-            <div
+            <Link
               key={card.label}
-              className="rounded-[20px] border border-line bg-cream p-5"
+              href={card.href}
+              className="group rounded-[20px] border border-line bg-cream p-5 transition-colors hover:border-matcha-deep/30 hover:bg-white"
             >
               <div className="flex items-start justify-between">
                 <p className="eyebrow text-[11px] text-muted">{card.label}</p>
@@ -124,7 +137,7 @@ export default async function AdminDashboardPage() {
                 {card.value}
               </p>
               <p className="mt-1 text-[11px] text-muted">{card.hint}</p>
-            </div>
+            </Link>
           );
         })}
       </div>
@@ -155,13 +168,27 @@ export default async function AdminDashboardPage() {
                 key={educator.id}
                 className="flex items-center gap-3 py-3 first:pt-0 last:pb-0"
               >
-                <div className="h-9 w-9 shrink-0 overflow-hidden rounded-full bg-matcha-soft">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={educator.photo}
-                    alt=""
-                    className="h-full w-full object-cover grayscale"
-                  />
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-matcha-soft">
+                  {educator.photo ? (
+                    <>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={educator.photo}
+                        alt=""
+                        className="h-full w-full object-cover grayscale"
+                      />
+                    </>
+                  ) : (
+                    <span className="font-display text-[9px] font-semibold text-matcha-deep/70">
+                      {educator.name
+                        .split(" ")
+                        .filter(Boolean)
+                        .slice(0, 2)
+                        .map((part) => part[0])
+                        .join("")
+                        .toUpperCase()}
+                    </span>
+                  )}
                 </div>
                 <div className="min-w-0 flex-1">
                   <p className="truncate font-display text-[12px] font-semibold text-ink">
@@ -212,11 +239,11 @@ export default async function AdminDashboardPage() {
                     {post.title}
                   </p>
                   <span className="shrink-0 text-[11px] tracking-[-0.01em] text-muted">
-                    {post.status}
+                    {post.status === "published" ? "Terbit" : "Draf"}
                   </span>
                 </div>
                 <p className="mt-0.5 truncate text-[11px] text-muted">
-                  /{post.slug} · {post.category}
+                  /{post.slug} · <span className="capitalize">{post.category}</span>
                 </p>
               </div>
             ))}

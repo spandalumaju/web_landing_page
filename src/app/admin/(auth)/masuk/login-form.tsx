@@ -4,6 +4,7 @@ import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import { LockKeyhole, Mail } from "lucide-react";
 import type { LoginState } from "./actions";
+import { Turnstile } from "@/components/security/turnstile";
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -20,8 +21,10 @@ function SubmitButton() {
 
 export function LoginForm({
   action,
+  turnstileSiteKey,
 }: {
   action: (state: LoginState, formData: FormData) => Promise<LoginState>;
+  turnstileSiteKey?: string;
 }) {
   const [state, formAction] = useActionState(action, {});
 
@@ -76,6 +79,8 @@ export function LoginForm({
           />
         </div>
       </div>
+
+      <Turnstile siteKey={turnstileSiteKey} action="admin_login" />
 
       {state.error && (
         <p

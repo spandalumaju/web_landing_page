@@ -17,7 +17,7 @@ export default async function ProtectedAdminLayout({
   return (
     <ToastProvider>
     <div className="flex min-h-dvh flex-col lg:flex-row">
-      <aside className="hidden w-64 shrink-0 flex-col border-r border-white/70 bg-[linear-gradient(180deg,#fcfdf8,#f4faef)] px-5 py-7 lg:flex">
+      <aside className="hidden w-64 shrink-0 flex-col border-r border-white/70 bg-[linear-gradient(180deg,#fcfdf8,#f4faef)] px-5 py-7 lg:sticky lg:top-0 lg:flex lg:h-dvh">
         <Link href="/admin" className="flex items-center gap-3 px-2">
           <SchoolMark className="h-10 w-10 text-matcha-deep" />
           <span>
@@ -49,6 +49,8 @@ export default async function ProtectedAdminLayout({
           <div className="mt-4 space-y-1">
             <Link
               href="/"
+              target="_blank"
+              rel="noreferrer"
               className="flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-[12px] text-ink-soft transition-colors hover:bg-matcha-soft/70 hover:text-ink"
             >
               <ArrowUpRight size={15} aria-hidden="true" />
@@ -68,7 +70,7 @@ export default async function ProtectedAdminLayout({
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="border-b border-line bg-cream px-5 py-4 lg:hidden">
+        <header className="sticky top-0 z-30 border-b border-line bg-cream/95 px-5 py-4 backdrop-blur-xl lg:hidden">
           <div className="flex items-center justify-between gap-4">
             <Link href="/admin" className="flex items-center gap-2.5">
               <SchoolMark className="h-8 w-8 text-matcha-deep" />
@@ -91,7 +93,7 @@ export default async function ProtectedAdminLayout({
           </div>
         </header>
 
-        <main className="min-w-0 flex-1 px-5 py-7 sm:px-7 lg:px-10 lg:py-10">
+        <main className="mx-auto min-w-0 w-full max-w-[1500px] flex-1 px-4 py-6 sm:px-7 sm:py-8 lg:px-10 lg:py-10">
           {children}
         </main>
       </div>

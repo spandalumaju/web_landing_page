@@ -73,12 +73,6 @@ export function resolveMediaPath(parts: string[]): string | null {
 }
 
 export function isSafeMediaUrl(value: string): boolean {
-  if (value.startsWith("/images/")) {
-    return /^\/images\/[A-Za-z0-9][A-Za-z0-9/_-]*\.(jpe?g|png|webp|avif)$/i.test(
-      value,
-    );
-  }
-
   return /^\/media\/(posts|educators)\/[0-9a-f-]{36}\.(jpe?g|png|webp|avif)$/i.test(
     value,
   );

@@ -1,10 +1,17 @@
 import { ArrowRight } from "lucide-react";
 import { profileFacts, site } from "@/lib/content";
+import { getSiteImagesByGroup } from "@/lib/db/queries/site-images";
 import { ParallaxImage } from "@/components/motion/parallax-image";
 import { Reveal } from "@/components/motion/reveal";
 import { SectionLabel } from "@/components/site/section-label";
 
 export function ProfileSection() {
+  const profileImages = getSiteImagesByGroup("profile");
+  const mainImage = profileImages.find((image) => image.key === "profile-main");
+  const secondaryImage = profileImages.find(
+    (image) => image.key === "profile-secondary",
+  );
+
   return (
     <section id="profil" className="section-pad bg-cream">
       <div className="container-x">
@@ -21,8 +28,8 @@ export function ProfileSection() {
 
             <Reveal variant="scale">
               <ParallaxImage
-                src="/images/students-id.jpg"
-                alt="Siswa di dalam kelas"
+                src={mainImage?.url ?? ""}
+                alt={mainImage?.alt || "Suasana pembelajaran di sekolah"}
                 sizes="(max-width: 1024px) 100vw, 50vw"
                 className="relative aspect-[4/5] rounded-[28px] shadow-[0_30px_80px_rgba(24,56,35,0.16),inset_0_1px_0_rgba(255,255,255,0.5)] ring-1 ring-white/50"
                 distance={24}
@@ -32,8 +39,8 @@ export function ProfileSection() {
             <Reveal delay={0.12} variant="scale" className="relative -mt-20 ml-auto w-[48%] sm:-mt-24 sm:w-[42%]">
               <div className="overflow-hidden rounded-[20px] border-[6px] border-white/90 shadow-[0_24px_60px_rgba(24,56,35,0.16)]">
                 <ParallaxImage
-                  src="/images/study.jpg"
-                  alt="Buku dan catatan di meja belajar"
+                  src={secondaryImage?.url ?? ""}
+                  alt={secondaryImage?.alt || "Kegiatan murid di sekolah"}
                   sizes="(max-width: 1024px) 50vw, 20vw"
                   className="aspect-[4/5]"
                   distance={16}

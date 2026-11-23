@@ -1,0 +1,23 @@
+# Service block for /opt/stack/docker-compose.yml
+  smpn2ambulu:
+    build:
+      context: ./apps/smpn2ambulu
+      dockerfile: Dockerfile
+    container_name: smpn2ambulu
+    restart: unless-stopped
+    env_file: ./apps/smpn2ambulu/.env.production
+    environment:
+      NODE_ENV: production
+      PORT: "3000"
+      HOSTNAME: 0.0.0.0
+      DATABASE_PATH: /app/data/smpn2ambulu.db
+    volumes:
+      - ./apps/smpn2ambulu/data:/app/data
+    expose:
+      - "3000"
+    deploy:
+      resources:
+        limits:
+          memory: 700M
+          cpus: "1.0"
+    networks: [main]

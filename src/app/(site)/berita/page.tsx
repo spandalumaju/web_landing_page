@@ -5,6 +5,7 @@ import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import { getPublishedPosts } from "@/lib/db/queries/content";
 import { SectionLabel } from "@/components/site/section-label";
 import { Reveal } from "@/components/motion/reveal";
+import { ImagePlaceholder } from "@/components/site/image-placeholder";
 
 export const dynamic = "force-dynamic";
 
@@ -58,13 +59,17 @@ export default function BeritaIndexPage() {
                 className="gloss-card group grid grid-cols-1 gap-6 rounded-[28px] p-4 sm:p-5 lg:grid-cols-12 lg:items-center"
               >
                 <div className="relative aspect-[16/10] overflow-hidden rounded-[22px] bg-matcha-mist lg:col-span-7">
-                  <Image
-                    src={featured.image}
-                    alt={featured.alt}
-                    fill
-                    sizes="(max-width: 1024px) 100vw, 58vw"
-                    className="image-soft object-cover transition-transform duration-[1100ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]"
-                  />
+                  {featured.image ? (
+                    <Image
+                      src={featured.image}
+                      alt={featured.alt}
+                      fill
+                      sizes="(max-width: 1024px) 100vw, 58vw"
+                      className="image-soft object-cover transition-transform duration-[1100ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]"
+                    />
+                  ) : (
+                    <ImagePlaceholder label="Foto berita belum diunggah" />
+                  )}
                 </div>
                 <div className="lg:col-span-5 lg:pr-4">
                   <div className="flex items-center gap-2 eyebrow text-[11px] text-muted">
@@ -100,13 +105,17 @@ export default function BeritaIndexPage() {
                   className="group"
                 >
                   <div className="relative aspect-[16/10] overflow-hidden rounded-[22px] bg-matcha-mist">
-                    <Image
-                      src={post.image}
-                      alt={post.alt}
-                      fill
-                      sizes="(max-width: 768px) 100vw, 33vw"
-                      className="image-soft object-cover transition-transform duration-[1100ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]"
-                    />
+                    {post.image ? (
+                      <Image
+                        src={post.image}
+                        alt={post.alt}
+                        fill
+                        sizes="(max-width: 768px) 100vw, 33vw"
+                        className="image-soft object-cover transition-transform duration-[1100ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]"
+                      />
+                    ) : (
+                      <ImagePlaceholder label="Foto berita belum diunggah" />
+                    )}
                   </div>
                   <div className="mt-4 flex items-center gap-2 eyebrow text-[11px] text-muted">
                     <span className="text-matcha-deep">{post.category}</span>

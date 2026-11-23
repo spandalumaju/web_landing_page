@@ -7,10 +7,12 @@ import { db } from "@/lib/db";
 import { users } from "@/lib/db/schema";
 import { verifyPassword } from "@/lib/auth/password";
 import { createSession, getClientIp } from "@/lib/auth/session";
+import { verifyTurnstile } from "@/lib/security/turnstile";
 import {
   clearLoginFailures,
   isLoginRateLimited,
   loginIdentifier,
+  loginIpIdentifier,
   recordLoginFailure,
 } from "@/lib/auth/rate-limit";
 
@@ -38,9 +40,20 @@ export async function loginAction(
 
   const email = parsed.data.email.toLowerCase();
   const ip = await getClientIp();
+  const turnstile = await verifyTurnstile(
+    String(formData.get("cf-turnstile-response") ?? ""),
+    ip,
+  );
+  if (!turnstile.ok) {
+    return { error: turnstile.error || "Verifikasi keamanan gagal." };
+  }
   const identifier = loginIdentifier(email, ip);
+  const ipIdentifier = loginIpIdentifier(ip);
 
-  if (isLoginRateLimited(identifier)) {
+  if (
+    isLoginRateLimited(identifier) ||
+    isLoginRateLimited(ipIdentifier)
+  ) {
     return {
       error: "Terlalu banyak percobaan. Coba lagi dalam 15 menit.",
     };
@@ -50,10 +63,12 @@ export async function loginAction(
 
   if (!user || !verifyPassword(parsed.data.password, user.passwordHash)) {
     recordLoginFailure(identifier);
+    recordLoginFailure(ipIdentifier);
     return { error: "Email atau password salah." };
   }
 
   clearLoginFailures(identifier);
+  clearLoginFailures(ipIdentifier);
   await createSession(user.id);
   redirect("/admin");
 }

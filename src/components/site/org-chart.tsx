@@ -37,14 +37,26 @@ function PersonCard({
           : "border-white/70 bg-white/90"
       }`}
     >
-      <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-full bg-matcha-mist">
-        <Image
-          src={photo}
-          alt={`Foto ${name}`}
-          fill
-          sizes="56px"
-          className="grayscale object-cover"
-        />
+      <div className="relative flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-full bg-matcha-mist">
+        {photo ? (
+          <Image
+            src={photo}
+            alt={`Foto ${name}`}
+            fill
+            sizes="56px"
+            className="grayscale object-cover"
+          />
+        ) : (
+          <span className="font-display text-sm font-semibold text-matcha-deep/75">
+            {name
+              .split(" ")
+              .filter(Boolean)
+              .slice(0, 2)
+              .map((part) => part[0])
+              .join("")
+              .toUpperCase()}
+          </span>
+        )}
       </div>
       <div>
         <p className="eyebrow text-[11px] text-matcha-deep">{role}</p>

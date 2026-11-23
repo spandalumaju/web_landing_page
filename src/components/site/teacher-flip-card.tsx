@@ -27,13 +27,27 @@ export function TeacherFlipCard({ educator }: { educator: Educator }) {
           aria-hidden={flipped}
           className="absolute inset-0 overflow-hidden rounded-[24px] bg-matcha-mist [backface-visibility:hidden] [-webkit-backface-visibility:hidden]"
         >
-          <Image
-            src={educator.photo}
-            alt={`Foto ${educator.name}`}
-            fill
-            sizes="(max-width: 768px) 50vw, (max-width: 1280px) 33vw, 25vw"
-            className="grayscale object-cover transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]"
-          />
+          {educator.photo ? (
+            <Image
+              src={educator.photo}
+              alt={`Foto ${educator.name}`}
+              fill
+              sizes="(max-width: 768px) 50vw, (max-width: 1280px) 33vw, 25vw"
+              className="grayscale object-cover transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]"
+            />
+          ) : (
+            <div className="flex h-full w-full items-center justify-center bg-[linear-gradient(145deg,#dcefd0,#f7fbf2)]">
+              <span className="font-display text-5xl font-semibold tracking-[-0.06em] text-matcha-deep/70">
+                {educator.name
+                  .split(" ")
+                  .filter(Boolean)
+                  .slice(0, 2)
+                  .map((part) => part[0])
+                  .join("")
+                  .toUpperCase()}
+              </span>
+            </div>
+          )}
           <div
             aria-hidden="true"
             className="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/15 to-transparent"
