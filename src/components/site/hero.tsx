@@ -53,7 +53,7 @@ export async function Hero() {
                 <ButtonLink href="#profil" variant="matcha">
                   Kenali sekolah
                 </ButtonLink>
-                <ButtonLink href="#ppdb" variant="outline">
+                <ButtonLink href="/spmb" variant="outline">
                   Informasi SPMB
                 </ButtonLink>
               </div>

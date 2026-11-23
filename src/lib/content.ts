@@ -28,7 +28,7 @@ export const navItems = [
   { label: "Akademik", href: "/#akademik" },
   { label: "Prestasi", href: "/#prestasi" },
   { label: "Berita", href: "/berita" },
-  { label: "SPMB", href: "/#ppdb" },
+  { label: "SPMB", href: "/spmb" },
 ];
 
 export const heroStats = [
@@ -520,6 +520,41 @@ export const ppdbSteps = [
   },
 ];
 
+export const ppdbRoutes = [
+  {
+    title: "Prestasi akademik",
+    description:
+      "Jalur bagi calon murid dengan capaian akademik, mengikuti ketentuan panitia SPMB.",
+  },
+  {
+    title: "Prestasi non-akademik",
+    description:
+      "Jalur bagi capaian seni, olahraga, atau bidang lain sesuai ketentuan resmi.",
+  },
+  {
+    title: "Afirmasi",
+    description:
+      "Jalur bagi calon murid yang memenuhi kriteria afirmasi pemerintah.",
+  },
+  {
+    title: "Mutasi",
+    description:
+      "Jalur bagi calon murid yang berpindah domisili atau mengikuti orang tua.",
+  },
+  {
+    title: "Zonasi",
+    description:
+      "Jalur berdasarkan domisili calon murid sesuai ketentuan resmi.",
+  },
+];
+
+export const ppdbDocuments = [
+  "Ijazah atau surat keterangan lulus",
+  "Akta kelahiran",
+  "Kartu keluarga",
+  "Dokumen pendukung sesuai jalur yang dipilih",
+];
+
 export const footerLinks = [
   {
     title: "Sekolah",
@@ -535,7 +570,7 @@ export const footerLinks = [
     links: [
       { label: "Berita", href: "/berita" },
       { label: "Galeri", href: "/#galeri" },
-      { label: "SPMB", href: "/#ppdb" },
+      { label: "SPMB", href: "/spmb" },
       { label: "Kontak", href: "/#kontak" },
       { label: "Kritik & saran", href: "/kritik-saran" },
     ],

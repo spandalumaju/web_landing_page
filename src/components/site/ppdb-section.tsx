@@ -50,8 +50,11 @@ export function PpdbSection() {
                   </div>
                 </Reveal>
                 <Reveal delay={0.14}>
-                  <div className="mt-8">
-                    <ButtonLink href="#kontak" variant="cream">
+                  <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                    <ButtonLink href="/spmb" variant="cream">
+                      Info SPMB lengkap
+                    </ButtonLink>
+                    <ButtonLink href="#kontak" variant="outlineLight">
                       Tanya panitia
                     </ButtonLink>
                   </div>

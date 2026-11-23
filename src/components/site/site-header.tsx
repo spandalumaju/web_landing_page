@@ -77,7 +77,8 @@ export function SiteHeader() {
           {navItems.map((item) => {
             const active =
               (item.href === "/guru" && pathname === "/guru") ||
-              (item.href === "/berita" && pathname.startsWith("/berita"));
+              (item.href === "/berita" && pathname.startsWith("/berita")) ||
+              (item.href === "/spmb" && pathname === "/spmb");
             return (
               <Link
                 key={item.href}
